@@ -1,4 +1,9 @@
 package finalproject;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 class Shape
 {
     void Hide(int start)
@@ -137,14 +142,23 @@ class Line extends Shape
         super.ChangeColour(start);
     }
 }
-class AnimationPlayer
+class ap
 {
-    AnimationPlayer()
-    {
-        
-    }
     void loadAnimationFromFile(String FileName)
     {
+        File newfile= new File(FileName);
+        String data="";
+        try {
+            Scanner reader=new Scanner(newfile);
+            while(reader.hasNextLine())
+            {
+                data+=reader.nextLine();
+                data+="\n";
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ap.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.print(data);
         
     }
     void run()
@@ -154,6 +168,8 @@ class AnimationPlayer
 }
 public class animationPlayer {
     public static void main(String[] args) {
+        ap a1= new ap();
+        a1.loadAnimationFromFile("/Users/giannacasselli/Downloads/"+"animation1.txt");
 
     }  
 }
