@@ -159,7 +159,7 @@ class ap
     int numObjs;
     void loadAnimationFromFile(String FileName)
     {
-        //there a LOT
+        //there is a LOT
         //im gonna comment in case it gets too confusing
         //text me if something doesnt make sense
         
