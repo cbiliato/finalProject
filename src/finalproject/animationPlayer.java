@@ -48,14 +48,7 @@ class Shape
     }
 }
 class Circle extends Shape
-{
-    int r;
-    int x;
-    int y;
-    String colour;
-    int border;
-    String borderColour;
-    
+{   
     Circle()
     {
         
@@ -83,14 +76,6 @@ class Circle extends Shape
 }
 class Rectangle extends Shape
 {
-    int x;
-    int y;
-    int border; 
-    String colour;
-    String borderColour;
-    int length;
-    int width;
-    
     Rectangle()
     {
         //debug
@@ -120,13 +105,6 @@ class Rectangle extends Shape
 }
 class Line extends Shape
 {
-    int startX;
-    int startY;
-    int endX;
-    int endY;
-    String colour;
-    int border;
-    
     Line()
     {
 
@@ -159,7 +137,7 @@ class ap
     int numObjs;
     void loadAnimationFromFile(String FileName)
     {
-        //there is a LOT
+        //there a LOT
         //im gonna comment in case it gets too confusing
         //text me if something doesnt make sense
         
