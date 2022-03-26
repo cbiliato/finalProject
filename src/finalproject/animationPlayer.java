@@ -65,7 +65,14 @@ class Circle extends Shape {
 
     }
 
-    void display() {
+    void display(Group root) {
+        javafx.scene.shape.Circle circle1 = new javafx.scene.shape.Circle(20);
+        circle1.setVisible(true);
+        circle1.setFill(Color.BLUE);
+        circle1.setCenterX(10);
+        circle1.setCenterX(10);
+
+        root.getChildren().add(circle1);
     }
 
     @Override
@@ -298,14 +305,8 @@ public class animationPlayer extends Application {
         Group root = new Group();
         Scene scene = new Scene(root, 600, 600);
         primaryStage.setScene(scene);
-
-        javafx.scene.shape.Circle circle1 = new javafx.scene.shape.Circle(20);
-        circle1.setVisible(true);
-        circle1.setFill(Color.BLUE);
-        circle1.setCenterX(1);
-        circle1.setCenterX(1);
-
-        root.getChildren().add(circle1);
+        Circle c1 = new Circle();
+        c1.display(root);
 
         primaryStage.show();
 
