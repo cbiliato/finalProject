@@ -10,9 +10,11 @@ import java.lang.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 class Shape {
@@ -61,6 +63,9 @@ class Circle extends Shape {
 
     Circle() {
 
+    }
+
+    void display() {
     }
 
     @Override
@@ -288,12 +293,27 @@ class ap {
 
 public class animationPlayer extends Application {
 
+    @Override
     public void start(Stage primaryStage) {
+        Group root = new Group();
+        Scene scene = new Scene(root, 600, 600);
+        primaryStage.setScene(scene);
+
+        javafx.scene.shape.Circle circle1 = new javafx.scene.shape.Circle(20);
+        circle1.setVisible(true);
+        circle1.setFill(Color.BLUE);
+        circle1.setCenterX(1);
+        circle1.setCenterX(1);
+
+        root.getChildren().add(circle1);
+
+        primaryStage.show();
+
     }
 
     public static void main(String[] args) {
         ap a1 = new ap();
-        a1.loadAnimationFromFile("/Users/giannacasselli/Downloads/" + "animation1.txt");
+        a1.loadAnimationFromFile("/Users/phant/OneDrive/Desktop/finalProjectRepo/finalProject/" + "animation1.txt");
         launch(args);
     }
 }
