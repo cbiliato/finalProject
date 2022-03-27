@@ -18,7 +18,9 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 class Shape {
-    
+
+    javafx.scene.shape.Shape shape;
+
     int x;
     int y;
     int r;
@@ -36,62 +38,62 @@ class Shape {
     //made this to make sure objects were actually being created
     //in the load animation mathod
     static int count;
-    
+
     Shape() {
         //updates everytime an object is made
         count++;
     }
-    
+
     void Hide(int start) {
-        
+
     }
-    
+
     void Show(int start) {
-        
+
     }
-    
+
     void Jump(int start, int x, int y) {
-        
+
     }
-    
+
     void ChangeColour(int start, String colour1) {
-        
+
     }
 }
 
 class Circle extends Shape {
-    
-    javafx.scene.shape.Circle circle1 = new javafx.scene.shape.Circle(20);
-    
+
+    javafx.scene.shape.Circle circle1 = new javafx.scene.shape.Circle();
     Circle() {
-        
+
     }
-    
-    void display(Group root) {
+
+    void draw(Group root) {
+        circle1.setRadius(r);
         circle1.setVisible(true);
         circle1.setFill(Color.BLUE);
-        circle1.setCenterX(10);
-        circle1.setCenterX(10);
-        
+        circle1.setCenterX(x);
+        circle1.setCenterX(y);
+
         root.getChildren().add(circle1);
     }
-    
+
     @Override
     void Hide(int start) {
         super.Hide(start);
         circle1.setVisible(false);
     }
-    
+
     @Override
     void Show(int start) {
         super.Show(start);
     }
-    
+
     @Override
     void Jump(int start, int x, int y) {
         super.Jump(start, x, y);
     }
-    
+
     @Override
     void ChangeColour(int start, String colour1) {
         super.ChangeColour(start, colour1);
@@ -99,28 +101,28 @@ class Circle extends Shape {
 }
 
 class Rectangle extends Shape {
-    
+
     Rectangle() {
         //debug
         //System.out.print(count);
 
     }
-    
+
     @Override
     void Hide(int start) {
         super.Hide(start);
     }
-    
+
     @Override
     void Show(int star) {
         super.Show(star);
     }
-    
+
     @Override
     void Jump(int start, int x, int y) {
         super.Jump(start, x, y);
     }
-    
+
     @Override
     void ChangeColour(int start, String colour1) {
         super.ChangeColour(start, colour1);
@@ -128,26 +130,26 @@ class Rectangle extends Shape {
 }
 
 class Line extends Shape {
-    
+
     Line() {
-        
+
     }
-    
+
     @Override
     void Show(int start) {
         super.Show(start);
     }
-    
+
     @Override
     void Hide(int start) {
         super.Hide(start);
     }
-    
+
     @Override
     void Jump(int start, int x, int y) {
         super.Jump(start, x, y);
     }
-    
+
     @Override
     void ChangeColour(int start, String colour1) {
         super.ChangeColour(start, colour1);
@@ -155,11 +157,11 @@ class Line extends Shape {
 }
 
 class ap {
-    
+
     int frames;
     int speed;
     int numObjs;
-    
+
     void loadAnimationFromFile(String FileName) {
         //there a LOT
         //im gonna comment in case it gets too confusing
@@ -238,7 +240,7 @@ class ap {
                 default:
                     break;
             }
-            
+
         }
         //now, we extrapolate the data on a case by case basis
         int j;
@@ -294,14 +296,14 @@ class ap {
         //debug
         //System.out.print(shapes[1].border);
     }
-    
+
     void run() {
-        
+
     }
 }
 
 public class animationPlayer extends Application {
-    
+
     @Override
     public void start(Stage primaryStage) {
         Group root = new Group();
@@ -309,15 +311,19 @@ public class animationPlayer extends Application {
         primaryStage.setScene(scene);
 
         Circle c1 = new Circle();
-        c1.display(root);
-        
+        c1.r = 20;
+        c1.y = 1;
+        c1.x = 1;
+        c1.draw(root);
+
         primaryStage.show();
-        
+
     }
-    
+
     public static void main(String[] args) {
         ap a1 = new ap();
         a1.loadAnimationFromFile("/Users/phant/OneDrive/Desktop/finalProjectRepo/finalProject/" + "animation1.txt");
         launch(args);
+
     }
 }
