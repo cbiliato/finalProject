@@ -1,4 +1,4 @@
-package finalproject;
+package animationplayer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,9 +16,8 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.animation.Timeline;
 
-abstract class Shape {
+class Shape {
 
     javafx.scene.shape.Shape shape;
 
@@ -45,8 +44,6 @@ abstract class Shape {
         count++;
     }
 
-    abstract void draw(Group root);
-
     void Hide(int start) {
 
     }
@@ -60,14 +57,18 @@ abstract class Shape {
     }
 
     void ChangeColour(int start, String colour1) {
+        
 
+    }
+    void draw(Group root)
+    {
+        
     }
 }
 
 class Circle extends Shape {
 
     javafx.scene.shape.Circle circle1 = new javafx.scene.shape.Circle();
-
     Circle() {
 
     }
@@ -106,7 +107,7 @@ class Circle extends Shape {
 }
 
 class Rectangle extends Shape {
-javafx.scene.shape.Rectangle rectangle1 = new javafx.scene.shape.Rectangle();
+    javafx.scene.shape.Rectangle rectangle1 = new javafx.scene.shape.Rectangle();
 
     Rectangle() {
         //debug
@@ -148,7 +149,6 @@ javafx.scene.shape.Rectangle rectangle1 = new javafx.scene.shape.Rectangle();
 }
 
 class Line extends Shape {
-
     javafx.scene.shape.Line line1 = new javafx.scene.shape.Line();
     Line() {
 
@@ -164,6 +164,7 @@ class Line extends Shape {
 
         root.getChildren().add(line1);
     }
+
     @Override
     void Show(int start) {
         super.Show(start);
@@ -185,7 +186,13 @@ class Line extends Shape {
     }
 }
 
- public Shape[] loadAnimationFromFile(String FileName) {
+class ap {
+
+    int frames;
+    int speed;
+    int numObjs;
+
+    public Shape[] loadAnimationFromFile(String FileName) {
         //there a LOT
         //im gonna comment in case it gets too confusing
         //text me if something doesnt make sense
@@ -334,7 +341,8 @@ class Line extends Shape {
 
     }
 }
-public class animationPlayer extends Application {
+
+public class Animationplayer extends Application {
 
     @Override
     public void start(Stage primaryStage) {
@@ -355,7 +363,8 @@ public class animationPlayer extends Application {
 
     public static void main(String[] args) {
         ap a1 = new ap();
-        //Shape[] shapes=a1.loadAnimationFromFile("/Users/giannacasselli/Downloads/animation1.txt");
+        Shape[] shapes=a1.loadAnimationFromFile("/Users/giannacasselli/Downloads/animation1.txt");
+        //System.out.print(shapes[1].x);
         launch(args);
 
     }
