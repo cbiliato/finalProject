@@ -106,15 +106,24 @@ class Circle extends Shape {
 }
 
 class Rectangle extends Shape {
+javafx.scene.shape.Rectangle rectangle1 = new javafx.scene.shape.Rectangle();
 
     Rectangle() {
         //debug
         //System.out.print(count);
 
     }
-
-    void draw(Group root) {
-
+    @Override
+    void draw(Group root)
+    {
+        rectangle1.setX(x);
+        rectangle1.setY(y);
+        rectangle1.setVisible(true);
+        rectangle1.setFill(Color.RED);
+        rectangle1.setWidth(length);
+        rectangle1.setHeight(width);
+        
+        root.getChildren().add(rectangle1);
     }
 
     @Override
@@ -323,9 +332,13 @@ public class animationPlayer extends Application {
         Group root = new Group();
         Scene scene = new Scene(root, 600, 600);
         ap a1 = new ap();
-        Shape[] shapes=a1.loadAnimationFromFile("/Users/phant/OneDrive/Desktop/finalProjectRepo/finalProject/" + "animation1.txt");
+        Shape[] shapes=a1.loadAnimationFromFile("/Users/giannacasselli/Downloads/animation1.txt");
         //launch(args);
-        shapes[0].draw(root);
+        int i;
+        for(i=0;i<shapes.length;i++)
+        {
+            shapes[i].draw(root);
+        }
         primaryStage.setScene(scene);
         primaryStage.show();
 
