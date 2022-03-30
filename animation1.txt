@@ -1,12 +1,12 @@
 frames: 100
 speed: 10 fps
-2
+3
 
 
 Circle
-r:10
-x:50
-y:50
+r: 10
+x: 500
+y: 500
 colour: 255,0,0
 effect
 Show
@@ -19,8 +19,8 @@ start: 120
 Rect
 length: 100
 width: 50
-x: 25
-y: 25
+x: 0
+y: 0
 border: 5
 effect
 Show
@@ -30,3 +30,11 @@ Jump
 start: 50
 x: 30
 y: 30
+
+
+Line
+startX: 200
+startY: 200
+endX: 300
+endY: 200
+
