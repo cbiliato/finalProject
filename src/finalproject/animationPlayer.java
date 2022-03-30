@@ -17,7 +17,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-class Shape {
+abstract class Shape {
 
     javafx.scene.shape.Shape shape;
 
@@ -44,6 +44,8 @@ class Shape {
         count++;
     }
 
+    abstract void draw(Group root);
+
     void Hide(int start) {
 
     }
@@ -64,10 +66,12 @@ class Shape {
 class Circle extends Shape {
 
     javafx.scene.shape.Circle circle1 = new javafx.scene.shape.Circle();
+
     Circle() {
 
     }
 
+    @Override
     void draw(Group root) {
         circle1.setRadius(r);
         circle1.setVisible(true);
@@ -108,6 +112,10 @@ class Rectangle extends Shape {
 
     }
 
+    void draw(Group root) {
+
+    }
+
     @Override
     void Hide(int start) {
         super.Hide(start);
@@ -133,6 +141,9 @@ class Line extends Shape {
 
     Line() {
 
+    }
+
+    void draw(Group root) {
     }
 
     @Override
