@@ -54,14 +54,6 @@ abstract class Shape {
 
     }
 
-    void Show(int start) {
-
-    }
-
-    void Jump(int start, int x, int y) {
-
-    }
-
     void ChangeColour(int start, String colour1) {
 
     }
@@ -90,16 +82,6 @@ class Circle extends Shape {
     void Hide(int start) {
         super.Hide(start);
         circle1.setVisible(false);
-    }
-
-    @Override
-    void Show(int start) {
-        super.Show(start);
-    }
-
-    @Override
-    void Jump(int start, int x, int y) {
-        super.Jump(start, x, y);
     }
 
     @Override
@@ -136,22 +118,14 @@ class Rectangle extends Shape {
     }
 
     @Override
-    void Show(int star) {
-        super.Show(star);
-    }
-
-    @Override
-    void Jump(int start, int x, int y) {
-        super.Jump(start, x, y);
-    }
-
-    @Override
     void ChangeColour(int start, String colour1) {
         super.ChangeColour(start, colour1);
     }
 }
 
 class Line extends Shape {
+
+    javafx.scene.shape.Line line1 = new javafx.scene.shape.Line();
 
     Line() {
 
@@ -161,18 +135,8 @@ class Line extends Shape {
     }
 
     @Override
-    void Show(int start) {
-        super.Show(start);
-    }
-
-    @Override
     void Hide(int start) {
         super.Hide(start);
-    }
-
-    @Override
-    void Jump(int start, int x, int y) {
-        super.Jump(start, x, y);
     }
 
     @Override
@@ -344,8 +308,8 @@ class ap {
                     shapes[i].effects.add(new Jump());
                     //sets variables start,x,y
                     shapes[i].effects.get(shapes[i].effects.size() - 1).setStart(Integer.parseInt(info[i][j + 1].substring(7)));
-                    ( (Jump) shapes[i].effects.get(shapes[i].effects.size() - 1) ).setX(Integer.parseInt(info[i][j + 2].substring(3)));
-                    ( (Jump) shapes[i].effects.get(shapes[i].effects.size() - 1) ).setY(Integer.parseInt(info[i][j + 3].substring(3)));
+                    ((Jump) shapes[i].effects.get(shapes[i].effects.size() - 1)).setX(Integer.parseInt(info[i][j + 2].substring(3)));
+                    ((Jump) shapes[i].effects.get(shapes[i].effects.size() - 1)).setY(Integer.parseInt(info[i][j + 3].substring(3)));
                     j += 4;
                 } else if (info[i][j].contains("Change")) {
                     shapes[i].ChangeColour(Integer.parseInt(info[i][j + 1].substring(7)), info[i][j + 2].substring(8));
@@ -406,7 +370,8 @@ public class animationPlayer extends Application {
 
     public static void main(String[] args) {
         ap a1 = new ap();
-        //Shape[] shapes=a1.loadAnimationFromFile("/Users/phant/OneDrive/Desktop/finalProjectRepo/finalProject/" + "animation1.txt");
+        Shape[] shapes = a1.loadAnimationFromFile("/Users/giannacasselli/Downloads/animation1.txt");
+        //System.out.print(shapes[1].x);
         launch(args);
 
     }
