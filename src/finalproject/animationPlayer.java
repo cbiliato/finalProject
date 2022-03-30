@@ -1,4 +1,4 @@
-package animationplayer;
+package finalproject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -61,10 +61,6 @@ abstract class Shape {
 
     void ChangeColour(int start, String colour1) {
 
-    }
-    void draw(Group root)
-    {
-        
     }
 }
 
@@ -320,14 +316,14 @@ class ap {
     }
 }
 
-public class Animationplayer extends Application {
+public class animationPlayer extends Application {
 
     @Override
     public void start(Stage primaryStage) {
         Group root = new Group();
         Scene scene = new Scene(root, 600, 600);
         ap a1 = new ap();
-        Shape[] shapes=a1.loadAnimationFromFile("/Users/giannacasselli/Downloads/animation1.txt");
+        Shape[] shapes=a1.loadAnimationFromFile("/Users/phant/OneDrive/Desktop/finalProjectRepo/finalProject/" + "animation1.txt");
         //launch(args);
         shapes[0].draw(root);
         primaryStage.setScene(scene);
@@ -337,8 +333,7 @@ public class Animationplayer extends Application {
 
     public static void main(String[] args) {
         ap a1 = new ap();
-        Shape[] shapes=a1.loadAnimationFromFile("/Users/giannacasselli/Downloads/animation1.txt");
-        System.out.print(shapes[0].y);
+        //Shape[] shapes=a1.loadAnimationFromFile("/Users/giannacasselli/Downloads/animation1.txt");
         launch(args);
 
     }
