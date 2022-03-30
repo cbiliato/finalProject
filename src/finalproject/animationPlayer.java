@@ -1,5 +1,7 @@
 package finalproject;
 
+import java.util.ArrayList;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -39,6 +41,7 @@ abstract class Shape {
     //made this to make sure objects were actually being created
     //in the load animation mathod
     static int count;
+    ArrayList<Effect> effects = new ArrayList<Effect>(0);
 
     Shape() {
         //updates everytime an object is made
@@ -106,23 +109,24 @@ class Circle extends Shape {
 }
 
 class Rectangle extends Shape {
-javafx.scene.shape.Rectangle rectangle1 = new javafx.scene.shape.Rectangle();
+
+    javafx.scene.shape.Rectangle rectangle1 = new javafx.scene.shape.Rectangle();
 
     Rectangle() {
         //debug
         //System.out.print(count);
 
     }
+
     @Override
-    void draw(Group root)
-    {
+    void draw(Group root) {
         rectangle1.setX(x);
         rectangle1.setY(y);
         rectangle1.setVisible(true);
         rectangle1.setFill(Color.RED);
         rectangle1.setWidth(length);
         rectangle1.setHeight(width);
-        
+
         root.getChildren().add(rectangle1);
     }
 
@@ -175,6 +179,56 @@ class Line extends Shape {
     void ChangeColour(int start, String colour1) {
         super.ChangeColour(start, colour1);
     }
+}
+
+class Effect {
+
+    private int start;
+
+    int getStart() {
+        return start;
+    }
+
+    void setStart(int start) {
+        if (start > 0) {
+            this.start = start;
+        }
+    }
+}
+
+class Show extends Effect {
+
+}
+
+class Jump extends Effect {
+
+    private int x;
+    private int y;
+
+    int getX() {
+        return x;
+    }
+
+    void setX(int x) {
+        if (x > 0) {
+            this.x = x;
+        }
+    }
+
+    int getY() {
+        return y;
+    }
+
+    void setY(int y) {
+        if (y > 0) {
+            this.y = y;
+        }
+    }
+
+}
+
+class ChangeColour {
+
 }
 
 class ap {
@@ -281,10 +335,17 @@ class ap {
                     shapes[i].Hide(Integer.parseInt(info[i][j + 1].substring(7)));
                     j += 2;
                 } else if (info[i][j].contains("Show")) {
-                    shapes[i].Show(Integer.parseInt(info[i][j + 1].substring(7)));
+                    shapes[i].effects.add(new Show());
+                    //sets start variable
+                    shapes[i].effects.get(shapes[i].effects.size() - 1).setStart(Integer.parseInt(info[i][j + 1].substring(7)));
                     j += 2;
                 } else if (info[i][j].contains("Jump")) {
-                    shapes[i].Jump(Integer.parseInt(info[i][j + 1].substring(7)), Integer.parseInt(info[i][j + 2].substring(3)), Integer.parseInt(info[i][j + 3].substring(3)));
+                    //shapes[i].Jump(Integer.parseInt(info[i][j + 1].substring(7)), Integer.parseInt(info[i][j + 2].substring(3)), Integer.parseInt(info[i][j + 3].substring(3)));
+                    shapes[i].effects.add(new Jump());
+                    //sets variables start,x,y
+                    shapes[i].effects.get(shapes[i].effects.size() - 1).setStart(Integer.parseInt(info[i][j + 1].substring(7)));
+                    ( (Jump) shapes[i].effects.get(shapes[i].effects.size() - 1) ).setX(Integer.parseInt(info[i][j + 2].substring(3)));
+                    ( (Jump) shapes[i].effects.get(shapes[i].effects.size() - 1) ).setY(Integer.parseInt(info[i][j + 3].substring(3)));
                     j += 4;
                 } else if (info[i][j].contains("Change")) {
                     shapes[i].ChangeColour(Integer.parseInt(info[i][j + 1].substring(7)), info[i][j + 2].substring(8));
@@ -316,8 +377,8 @@ class ap {
         }
         //debug
         //System.out.print(shapes[1].border);
-        return(shapes);
-        
+        return (shapes);
+
     }
 
     void run() {
@@ -332,11 +393,10 @@ public class animationPlayer extends Application {
         Group root = new Group();
         Scene scene = new Scene(root, 600, 600);
         ap a1 = new ap();
-        Shape[] shapes=a1.loadAnimationFromFile("/Users/giannacasselli/Downloads/animation1.txt");
+        Shape[] shapes = a1.loadAnimationFromFile("/Users/phant/OneDrive/Desktop/finalProjectRepo/finalProject/animation1.txt");
         //launch(args);
         int i;
-        for(i=0;i<shapes.length;i++)
-        {
+        for (i = 0; i < shapes.length; i++) {
             shapes[i].draw(root);
         }
         primaryStage.setScene(scene);
@@ -346,7 +406,7 @@ public class animationPlayer extends Application {
 
     public static void main(String[] args) {
         ap a1 = new ap();
-        Shape[] shapes=a1.loadAnimationFromFile("/Users/phant/OneDrive/Desktop/finalProjectRepo/finalProject/" + "animation1.txt");
+        //Shape[] shapes=a1.loadAnimationFromFile("/Users/phant/OneDrive/Desktop/finalProjectRepo/finalProject/" + "animation1.txt");
         launch(args);
 
     }
