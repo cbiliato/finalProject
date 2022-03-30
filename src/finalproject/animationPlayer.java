@@ -185,13 +185,7 @@ class Line extends Shape {
     }
 }
 
-class ap {
-
-    int frames;
-    int speed;
-    int numObjs;
-
-    public Shape[] loadAnimationFromFile(String FileName) {
+ public Shape[] loadAnimationFromFile(String FileName) {
         //there a LOT
         //im gonna comment in case it gets too confusing
         //text me if something doesnt make sense
@@ -212,127 +206,134 @@ class ap {
             Logger.getLogger(ap.class.getName()).log(Level.SEVERE, null, ex);
         }
         //debug
-        System.out.print(data);
-        //create array of strings from original data file
-        //this file will be separated by two new line characters
-        //i.e. the specs of the animation, and each object in the animation
-        String[] objs = data.split("\n\n");
-        //the specs of the animation will be put into its own array of strings
-        //so data can be extracted
-        //split at new line character
-        String[] specs = objs[0].split("\n");
-        //total number of frames is always first line
-        frames = Integer.parseInt(specs[0].substring(8, '\n' + 1));
-        //speed is always second
-        speed = Integer.parseInt(specs[1].substring(7, '\n' - 1));
-        //total number of objects is always third
-        numObjs = Integer.parseInt(specs[2].substring(0));
-        //System.out.print(numObjs);
-        //now that the specs data has been extracted, move on to 
-        //the actual objects data
+        try{
+            System.out.print(data);
+            //create array of strings from original data file
+            //this file will be separated by two new line characters
+            //i.e. the specs of the animation, and each object in the animation
+            String[] objs = data.split("\n\n");
+            //the specs of the animation will be put into its own array of strings
+            //so data can be extracted
+            //split at new line character
+            String[] specs = objs[0].split("\n");
+            //total number of frames is always first line
+            frames = Integer.parseInt(specs[0].substring(8, '\n' + 1));
+            //speed is always second
+            speed = Integer.parseInt(specs[1].substring(7, '\n' - 1));
+            //total number of objects is always third
+            numObjs = Integer.parseInt(specs[2].substring(0));
+            //System.out.print(numObjs);
+            //now that the specs data has been extracted, move on to 
+            //the actual objects data
 
-        //create array of objects of type shape
-        //this is the parent class so each category of shape
-        //can be specified when data is read
-        Shape[] shapes;
-        //size of shape array is the number of objects as specified
-        //in the specs data
-        shapes = new Shape[numObjs];
-        //this is where it gets confusing, bare with me
-
-        //create an array of arrays of strings
-        //first index represents object number
-        //second index is line number within that objects info block in .txt file
-        String[][] info = new String[numObjs][];
-        int i;
-        //split each object into array of strings
-        //split by new line character
-        for (i = 1; i <= numObjs; i++) {
-            info[i - 1] = objs[i].split("\n");
-        }
-        //debug
-        //System.out.print(info[1][0]);
-
-        //now, we create the objects and put them into the shapes array
-        for (i = 0; i < numObjs; i++) {
-            //since first line is always blank, second index starts at 1, not 0
-            switch (info[i][1]) {
-                case ("Circle"):
-                    shapes[i] = new Circle();
-                    break;
-                case ("Rect"):
-                    shapes[i] = new Rectangle();
-                    break;
-                case ("Line"):
-                    shapes[i] = new Line();
-                    break;
-                default:
-                    break;
+            //create array of objects of type shape
+            //this is the parent class so each category of shape
+            //can be specified when data is read
+            Shape[] shapes;
+            //size of shape array is the number of objects as specified
+            //in the specs data
+            shapes = new Shape[numObjs];
+            //this is where it gets confusing, bare with me
+        
+            //create an array of arrays of strings
+            //first index represents object number
+            //second index is line number within that objects info block in .txt file
+            String[][] info = new String[numObjs][];
+            int i;
+            //split each object into array of strings
+            //split by new line character
+            for (i = 1; i <= numObjs; i++) {
+                info[i - 1] = objs[i].split("\n");
             }
+            //debug
+            //System.out.print(info[1][0]);
 
-        }
-        //now, we extrapolate the data on a case by case basis
-        int j;
-        //loop to index through the number of shapes
-        for (i = 0; i < numObjs; i++) {
-            //second loop to index through the individual line of info
-            //for each shape
-            //loop index starts at 2 to skip unnecessary info
-            for (j = 2; j < info[i].length; j++) {
-                //cases for different info types
-                //assign info to shape object
-                if ((info[i][j].contains("r:")) && !(info[i][j].contains("c")) && !(info[i][j].contains("b"))) {
-                    shapes[i].r = Integer.parseInt(info[i][j].substring(3));
-                } else if (info[i][j].contains("colour:")) {
-                    shapes[i].colour = info[i][j].substring(8);
-                } else if (info[i][j].contains("Hide")) {
-                    shapes[i].Hide(Integer.parseInt(info[i][j + 1].substring(7)));
-                    j += 2;
-                } else if (info[i][j].contains("Show")) {
-                    shapes[i].Show(Integer.parseInt(info[i][j + 1].substring(7)));
-                    j += 2;
-                } else if (info[i][j].contains("Jump")) {
-                    shapes[i].Jump(Integer.parseInt(info[i][j + 1].substring(7)), Integer.parseInt(info[i][j + 2].substring(3)), Integer.parseInt(info[i][j + 3].substring(3)));
-                    j += 4;
-                } else if (info[i][j].contains("Change")) {
-                    shapes[i].ChangeColour(Integer.parseInt(info[i][j + 1].substring(7)), info[i][j + 2].substring(8));
-                    j += 3;
-                } else if (info[i][j].contains("x:")) {
-                    shapes[i].x = Integer.parseInt(info[i][j].substring(3));
-                } else if (info[i][j].contains("y:")) {
-                    shapes[i].y = Integer.parseInt(info[i][j].substring(3));
-                } else if (info[i][j].contains("effect")) {
-                    j++;
-                } else if (info[i][j].contains("length")) {
-                    shapes[i].length = Integer.parseInt(info[i][j].substring(8));
-                } else if (info[i][j].contains("width")) {
-                    shapes[i].width = Integer.parseInt(info[i][j].substring(7));
-                } else if ((info[i][j].contains("border")) && !(info[i][j].contains("l"))) {
-                    shapes[i].border = Integer.parseInt(info[i][j].substring(8));
-                } else if ((info[i][j].contains("border")) && (info[i][j].contains("l"))) {
-                    shapes[i].borderColour = info[i][j].substring(15);
-                } else if (info[i][j].contains("startX")) {
-                    shapes[i].startX = Integer.parseInt(info[i][j].substring(8));
-                } else if (info[i][j].contains("startY")) {
-                    shapes[i].startY = Integer.parseInt(info[i][j].substring(8));
-                } else if (info[i][j].contains("endX")) {
-                    shapes[i].endX = Integer.parseInt(info[i][j].substring(6));
-                } else if (info[i][j].contains("endY")) {
-                    shapes[i].endY = Integer.parseInt(info[i][j].substring(6));
+            //now, we create the objects and put them into the shapes array
+            for (i = 0; i < numObjs; i++) {
+                //since first line is always blank, second index starts at 1, not 0
+                switch (info[i][1]) {
+                    case ("Circle"):
+                        shapes[i] = new Circle();
+                        break;
+                    case ("Rect"):
+                        shapes[i] = new Rectangle();
+                        break;
+                    case ("Line"):
+                        shapes[i] = new Line();
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            //now, we extrapolate the data on a case by case basis
+            int j;
+            //loop to index through the number of shapes
+            for (i = 0; i < numObjs; i++) {
+                //second loop to index through the individual line of info
+                //for each shape
+                //loop index starts at 2 to skip unnecessary info
+                for (j = 2; j < info[i].length; j++) {
+                    //cases for different info types
+                    //assign info to shape object
+                    if ((info[i][j].contains("r:")) && !(info[i][j].contains("c")) && !(info[i][j].contains("b"))) {
+                        shapes[i].r = Integer.parseInt(info[i][j].substring(3));
+                    } else if (info[i][j].contains("colour:")) {
+                        shapes[i].colour = info[i][j].substring(8);
+                    } else if (info[i][j].contains("Hide")) {
+                        shapes[i].Hide(Integer.parseInt(info[i][j + 1].substring(7)));
+                        j += 2;
+                    } else if (info[i][j].contains("Show")) {
+                        shapes[i].Show(Integer.parseInt(info[i][j + 1].substring(7)));
+                        j += 2;
+                    } else if (info[i][j].contains("Jump")) {
+                        shapes[i].Jump(Integer.parseInt(info[i][j + 1].substring(7)), Integer.parseInt(info[i][j + 2].substring(3)), Integer.parseInt(info[i][j + 3].substring(3)));
+                        j += 4;
+                    } else if (info[i][j].contains("Change")) {
+                        shapes[i].ChangeColour(Integer.parseInt(info[i][j + 1].substring(7)), info[i][j + 2].substring(8));
+                        j += 3;
+                    } else if (info[i][j].contains("x:")) {
+                        shapes[i].x = Integer.parseInt(info[i][j].substring(3));
+                    } else if (info[i][j].contains("y:")) {
+                        shapes[i].y = Integer.parseInt(info[i][j].substring(3));
+                    } else if (info[i][j].contains("effect")) {
+                        j++;
+                    } else if (info[i][j].contains("length")) {
+                        shapes[i].length = Integer.parseInt(info[i][j].substring(8));
+                    } else if (info[i][j].contains("width")) {
+                        shapes[i].width = Integer.parseInt(info[i][j].substring(7));
+                    } else if ((info[i][j].contains("border")) && !(info[i][j].contains("l"))) {
+                        shapes[i].border = Integer.parseInt(info[i][j].substring(8));
+                    } else if ((info[i][j].contains("border")) && (info[i][j].contains("l"))) {
+                        shapes[i].borderColour = info[i][j].substring(15);
+                    } else if (info[i][j].contains("startX")) {
+                        shapes[i].startX = Integer.parseInt(info[i][j].substring(8));
+                    } else if (info[i][j].contains("startY")) {
+                        shapes[i].startY = Integer.parseInt(info[i][j].substring(8));
+                    } else if (info[i][j].contains("endX")) {
+                        shapes[i].endX = Integer.parseInt(info[i][j].substring(6));
+                    } else if (info[i][j].contains("endY")) {
+                        shapes[i].endY = Integer.parseInt(info[i][j].substring(6));
+                    }
                 }
             }
+            //debug
+            //System.out.print(shapes[1].border);
+            return(shapes);
         }
-        //debug
-        //System.out.print(shapes[1].border);
-        return(shapes);
-        
+        catch(Exception e)
+        {
+            System.out.println("Something went wrong");
+            Shape[] empty;
+            empty=new Shape[0];
+            return empty;
+        }    
     }
 
     void run() {
 
     }
 }
-
 public class animationPlayer extends Application {
 
     @Override
