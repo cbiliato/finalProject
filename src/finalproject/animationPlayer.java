@@ -333,7 +333,7 @@ public class animationPlayer extends Application {
 
     public static void main(String[] args) {
         ap a1 = new ap();
-        //Shape[] shapes=a1.loadAnimationFromFile("/Users/giannacasselli/Downloads/animation1.txt");
+        Shape[] shapes=a1.loadAnimationFromFile("/Users/phant/OneDrive/Desktop/finalProjectRepo/finalProject/" + "animation1.txt");
         launch(args);
 
     }
