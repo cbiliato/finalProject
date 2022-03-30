@@ -124,14 +124,20 @@ class Rectangle extends Shape {
 }
 
 class Line extends Shape {
-
-    javafx.scene.shape.Line line1 = new javafx.scene.shape.Line();
-
+javafx.scene.shape.Line line1 = new javafx.scene.shape.Line();
     Line() {
 
     }
-
+    @Override
     void draw(Group root) {
+        line1.setVisible(true);
+        line1.setFill(Color.GREEN);
+        line1.setStartX(startX);
+        line1.setStartY(startY);
+        line1.setEndX(endX);
+        line1.setEndY(endY);
+
+        root.getChildren().add(line1);
     }
 
     @Override
