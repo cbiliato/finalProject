@@ -1,4 +1,4 @@
-package finalproject;
+package animationplayer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -62,6 +62,10 @@ abstract class Shape {
     void ChangeColour(int start, String colour1) {
 
     }
+    void draw(Group root)
+    {
+        
+    }
 }
 
 class Circle extends Shape {
@@ -78,7 +82,7 @@ class Circle extends Shape {
         circle1.setVisible(true);
         circle1.setFill(Color.BLUE);
         circle1.setCenterX(x);
-        circle1.setCenterX(y);
+        circle1.setCenterY(y);
 
         root.getChildren().add(circle1);
     }
@@ -174,7 +178,7 @@ class ap {
     int speed;
     int numObjs;
 
-    void loadAnimationFromFile(String FileName) {
+    public Shape[] loadAnimationFromFile(String FileName) {
         //there a LOT
         //im gonna comment in case it gets too confusing
         //text me if something doesnt make sense
@@ -307,6 +311,8 @@ class ap {
         }
         //debug
         //System.out.print(shapes[1].border);
+        return(shapes);
+        
     }
 
     void run() {
@@ -314,27 +320,25 @@ class ap {
     }
 }
 
-public class animationPlayer extends Application {
+public class Animationplayer extends Application {
 
     @Override
     public void start(Stage primaryStage) {
         Group root = new Group();
         Scene scene = new Scene(root, 600, 600);
+        ap a1 = new ap();
+        Shape[] shapes=a1.loadAnimationFromFile("/Users/giannacasselli/Downloads/animation1.txt");
+        //launch(args);
+        shapes[0].draw(root);
         primaryStage.setScene(scene);
-
-        Circle c1 = new Circle();
-        c1.r = 20;
-        c1.y = 1;
-        c1.x = 1;
-        c1.draw(root);
-
         primaryStage.show();
 
     }
 
     public static void main(String[] args) {
         ap a1 = new ap();
-        a1.loadAnimationFromFile("/Users/phant/OneDrive/Desktop/finalProjectRepo/finalProject/" + "animation1.txt");
+        Shape[] shapes=a1.loadAnimationFromFile("/Users/giannacasselli/Downloads/animation1.txt");
+        System.out.print(shapes[0].y);
         launch(args);
 
     }
