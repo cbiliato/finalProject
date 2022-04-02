@@ -49,14 +49,6 @@ abstract class Shape {
     }
 
     abstract void draw(Group root);
-
-    void Hide(int start) {
-
-    }
-
-    void ChangeColour(int start, String colour1) {
-
-    }
 }
 
 class Circle extends Shape {
@@ -76,17 +68,6 @@ class Circle extends Shape {
         circle1.setCenterY(y);
 
         root.getChildren().add(circle1);
-    }
-
-    @Override
-    void Hide(int start) {
-        super.Hide(start);
-        circle1.setVisible(false);
-    }
-
-    @Override
-    void ChangeColour(int start, String colour1) {
-        super.ChangeColour(start, colour1);
     }
 }
 
@@ -111,16 +92,6 @@ class Rectangle extends Shape {
 
         root.getChildren().add(rectangle1);
     }
-
-    @Override
-    void Hide(int start) {
-        super.Hide(start);
-    }
-
-    @Override
-    void ChangeColour(int start, String colour1) {
-        super.ChangeColour(start, colour1);
-    }
 }
 
 class Line extends Shape {
@@ -131,23 +102,13 @@ javafx.scene.shape.Line line1 = new javafx.scene.shape.Line();
     @Override
     void draw(Group root) {
         line1.setVisible(true);
-        line1.setFill(Color.GREEN);
+        line1.setStroke(Color.GREEN);
         line1.setStartX(startX);
         line1.setStartY(startY);
         line1.setEndX(endX);
         line1.setEndY(endY);
 
         root.getChildren().add(line1);
-    }
-
-    @Override
-    void Hide(int start) {
-        super.Hide(start);
-    }
-
-    @Override
-    void ChangeColour(int start, String colour1) {
-        super.ChangeColour(start, colour1);
     }
 }
 
@@ -168,6 +129,10 @@ class Effect {
 
 class Show extends Effect {
 
+}
+
+class Hide extends Effect {
+    
 }
 
 class Jump extends Effect {
@@ -197,7 +162,10 @@ class Jump extends Effect {
 
 }
 
-class ChangeColour {
+class ChangeColour extends Effect {
+    
+    
+    
 
 }
 
@@ -302,7 +270,9 @@ class ap {
                 } else if (info[i][j].contains("colour:")) {
                     shapes[i].colour = info[i][j].substring(8);
                 } else if (info[i][j].contains("Hide")) {
-                    shapes[i].Hide(Integer.parseInt(info[i][j + 1].substring(7)));
+                    shapes[i].effects.add(new Hide());
+                    //sets start variable
+                    shapes[i].effects.get(shapes[i].effects.size() - 1).setStart(Integer.parseInt(info[i][j + 1].substring(7)));
                     j += 2;
                 } else if (info[i][j].contains("Show")) {
                     shapes[i].effects.add(new Show());
@@ -318,8 +288,12 @@ class ap {
                     ((Jump) shapes[i].effects.get(shapes[i].effects.size() - 1)).setY(Integer.parseInt(info[i][j + 3].substring(3)));
                     j += 4;
                 } else if (info[i][j].contains("Change")) {
-                    shapes[i].ChangeColour(Integer.parseInt(info[i][j + 1].substring(7)), info[i][j + 2].substring(8));
-                    j += 3;
+                    shapes[i].effects.add(new ChangeColour());
+                    
+                    shapes[i].effects.get(shapes[i].effects.size() - 1).setStart(Integer.parseInt(info[i][j + 1].substring(7)));
+                    ((ChangeColour) shapes[i].effects.get(shapes[i]))
+                    //shapes[i].ChangeColour(Integer.parseInt(info[i][j + 1].substring(7)), info[i][j + 2].substring(8));
+                    //j += 3;
                 } else if (info[i][j].contains("x:")) {
                     shapes[i].x = Integer.parseInt(info[i][j].substring(3));
                 } else if (info[i][j].contains("y:")) {
@@ -363,7 +337,7 @@ public class animationPlayer extends Application {
         Group root = new Group();
         Scene scene = new Scene(root, 600, 600);
         ap a1 = new ap();
-        Shape[] shapes = a1.loadAnimationFromFile("/Users/phant/OneDrive/Desktop/finalProjectRepo/finalProject/animation1.txt");
+        Shape[] shapes = a1.loadAnimationFromFile("/Users/carts/Downloads/animation1.txt");
         //launch(args);
         int i;
         for (i = 0; i < shapes.length; i++) {
@@ -376,9 +350,10 @@ public class animationPlayer extends Application {
 
     public static void main(String[] args) {
         ap a1 = new ap();
-        Shape[] shapes = a1.loadAnimationFromFile("/Users/giannacasselli/Downloads/animation1.txt");
+        Shape[] shapes = a1.loadAnimationFromFile("/Users/carts/Downloads/animation1.txt");
         //System.out.print(shapes[1].x);
         launch(args);
 
     }
 }
+
