@@ -1,4 +1,4 @@
-package animationplayer;
+package finalproject;
 
 import java.util.ArrayList;
 
@@ -19,6 +19,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.animation.Timeline;
+import javafx.animation.KeyFrame;
+import javafx.util.Duration;
 
 abstract class Shape {
 
@@ -27,7 +29,7 @@ abstract class Shape {
     int x;
     int y;
     int r;
-    String colour="0,0,255";
+    String colour = "0,0,255";
     int start;
     int border;
     //set default border colour in case not specified
@@ -61,7 +63,7 @@ class Circle extends Shape {
 
     @Override
     void draw(Group root) {
-        Color c=Color.web("rgb("+colour+")");
+        Color c = Color.web("rgb(" + colour + ")");
         circle1.setRadius(r);
         circle1.setVisible(true);
         circle1.setFill(c);
@@ -84,7 +86,7 @@ class Rectangle extends Shape {
 
     @Override
     void draw(Group root) {
-        Color c=Color.web("rgb("+colour+")");
+        Color c = Color.web("rgb(" + colour + ")");
         rectangle1.setX(x);
         rectangle1.setY(y);
         rectangle1.setVisible(true);
@@ -97,13 +99,16 @@ class Rectangle extends Shape {
 }
 
 class Line extends Shape {
-javafx.scene.shape.Line line1 = new javafx.scene.shape.Line();
+
+    javafx.scene.shape.Line line1 = new javafx.scene.shape.Line();
+
     Line() {
 
     }
+
     @Override
     void draw(Group root) {
-        Color c=Color.web("rgb("+colour+")");
+        Color c = Color.web("rgb(" + colour + ")");
         line1.setVisible(true);
         line1.setStroke(c);
         line1.setStartX(startX);
@@ -135,7 +140,7 @@ class Show extends Effect {
 }
 
 class Hide extends Effect {
-    
+
 }
 
 class Jump extends Effect {
@@ -165,13 +170,11 @@ class Jump extends Effect {
 
 }
 
-
 class ChangeColour extends Effect {
-    
-    Color setColour(String colour1, int start)
-    {
-        String rgb="rgb(";
-        Color c = Color.web(rgb+colour1+")");
+
+    Color setColour(String colour1, int start) {
+        String rgb = "rgb(";
+        Color c = Color.web(rgb + colour1 + ")");
         return c;
     }
 
@@ -179,9 +182,9 @@ class ChangeColour extends Effect {
 
 class ap {
 
-    int frames;
-    int speed;
-    int numObjs;
+    static int frames;
+    static int speed;
+    static int numObjs;
 
     public Shape[] loadAnimationFromFile(String FileName) {
         //there a LOT
@@ -297,7 +300,7 @@ class ap {
                     j += 4;
                 } else if (info[i][j].contains("Change")) {
                     shapes[i].effects.add(new ChangeColour());
-                    
+
                     shapes[i].effects.get(shapes[i].effects.size() - 1).setStart(Integer.parseInt(info[i][j + 1].substring(7)));
                     //((ChangeColour) shapes[i].effects.get(shapes[i]));
                     //shapes[i].ChangeColour(Integer.parseInt(info[i][j + 1].substring(7)), info[i][j + 2].substring(8));
@@ -338,7 +341,7 @@ class ap {
     }
 }
 
-public class Animationplayer extends Application {
+public class animationPlayer extends Application {
 
     @Override
     public void start(Stage primaryStage) {
@@ -353,6 +356,21 @@ public class Animationplayer extends Application {
         }
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        //parameter is frame rate
+        Timeline timeline = new Timeline(ap.speed);
+        timeline.setCycleCount(1);
+
+        //first parameter is start time
+        KeyFrame stopFrame = new KeyFrame(Duration.seconds(ap.frames / ap.speed), event -> {
+            timeline.stop();
+        }
+        );
+
+        //adds keyframe to timeline
+        timeline.getKeyFrames().add(stopFrame);
+
+        timeline.play();
 
     }
 
