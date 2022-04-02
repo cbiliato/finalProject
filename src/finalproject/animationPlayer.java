@@ -364,6 +364,7 @@ public class animationPlayer extends Application {
         //first parameter is start time
         KeyFrame stopFrame = new KeyFrame(Duration.seconds(ap.frames / ap.speed), event -> {
             timeline.stop();
+            primaryStage.close();
         }
         );
 
