@@ -51,6 +51,8 @@ abstract class Shape {
     }
 
     abstract void draw(Group root);
+
+    abstract javafx.scene.shape.Shape getShape();
 }
 
 class Circle extends Shape {
@@ -71,6 +73,11 @@ class Circle extends Shape {
         circle1.setCenterY(y);
 
         root.getChildren().add(circle1);
+    }
+
+    @Override
+    javafx.scene.shape.Circle getShape() {
+        return circle1;
     }
 }
 
@@ -96,6 +103,11 @@ class Rectangle extends Shape {
 
         root.getChildren().add(rectangle1);
     }
+
+    @Override
+    javafx.scene.shape.Rectangle getShape() {
+        return rectangle1;
+    }
 }
 
 class Line extends Shape {
@@ -117,6 +129,11 @@ class Line extends Shape {
         line1.setEndY(endY);
 
         root.getChildren().add(line1);
+    }
+
+    @Override
+    javafx.scene.shape.Line getShape() {
+        return line1;
     }
 
 }
@@ -143,9 +160,8 @@ class Show extends Effect {
 
     void play(javafx.scene.shape.Shape shape, Timeline timeline) {
         //first parameter is start time
-        KeyFrame showFrame = new KeyFrame(Duration.seconds(ap.frames / ap.speed), event -> {
-            timeline.stop();
-            shape.setVisible(true);
+        KeyFrame showFrame = new KeyFrame(Duration.seconds(1), event -> {
+            shape.setVisible(false);
         }
         );
 
@@ -364,7 +380,7 @@ public class animationPlayer extends Application {
         Group root = new Group();
         Scene scene = new Scene(root, 600, 600);
         ap a1 = new ap();
-        Shape[] shapes = a1.loadAnimationFromFile("Users/phant/OneDrive/Desktop/finalProjectRepo/finalProject/animation1.txt");
+        Shape[] shapes = a1.loadAnimationFromFile("/Users/phant/OneDrive/Desktop/finalProjectRepo/finalProject/animation1.txt");
         //launch(args);
         int i;
         for (i = 0; i < shapes.length; i++) {
@@ -388,7 +404,7 @@ public class animationPlayer extends Application {
         timeline.getKeyFrames().add(stopFrame);
 
         Show show = new Show();
-        show.play(((Circle)shapes[0]).circle1, timeline);
+        show.play(shapes[0].getShape(), timeline);
 
         timeline.play();
 
