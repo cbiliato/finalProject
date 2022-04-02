@@ -1,4 +1,4 @@
-package finalproject;
+package animationplayer;
 
 import java.util.ArrayList;
 
@@ -27,7 +27,8 @@ abstract class Shape {
     int x;
     int y;
     int r;
-    String colour;
+    String colour="0,0,255";
+    Color c=Color.web("rgb("+colour+")");
     int start;
     int border;
     //set default border colour in case not specified
@@ -63,7 +64,7 @@ class Circle extends Shape {
     void draw(Group root) {
         circle1.setRadius(r);
         circle1.setVisible(true);
-        circle1.setFill(Color.BLUE);
+        circle1.setFill(c);
         circle1.setCenterX(x);
         circle1.setCenterY(y);
 
@@ -86,7 +87,7 @@ class Rectangle extends Shape {
         rectangle1.setX(x);
         rectangle1.setY(y);
         rectangle1.setVisible(true);
-        rectangle1.setFill(Color.RED);
+        rectangle1.setFill(c);
         rectangle1.setWidth(length);
         rectangle1.setHeight(width);
 
@@ -102,7 +103,7 @@ javafx.scene.shape.Line line1 = new javafx.scene.shape.Line();
     @Override
     void draw(Group root) {
         line1.setVisible(true);
-        line1.setStroke(Color.GREEN);
+        line1.setStroke(c);
         line1.setStartX(startX);
         line1.setStartY(startY);
         line1.setEndX(endX);
@@ -162,10 +163,15 @@ class Jump extends Effect {
 
 }
 
+
 class ChangeColour extends Effect {
     
-    
-    
+    Color setColour(String colour1, int start)
+    {
+        String rgb="rgb(";
+        Color c = Color.web(rgb+colour1+")");
+        return c;
+    }
 
 }
 
@@ -291,7 +297,7 @@ class ap {
                     shapes[i].effects.add(new ChangeColour());
                     
                     shapes[i].effects.get(shapes[i].effects.size() - 1).setStart(Integer.parseInt(info[i][j + 1].substring(7)));
-                    ((ChangeColour) shapes[i].effects.get(shapes[i]))
+                    //((ChangeColour) shapes[i].effects.get(shapes[i]));
                     //shapes[i].ChangeColour(Integer.parseInt(info[i][j + 1].substring(7)), info[i][j + 2].substring(8));
                     //j += 3;
                 } else if (info[i][j].contains("x:")) {
@@ -320,7 +326,7 @@ class ap {
             }
         }
         //debug
-        //System.out.print(shapes[1].border);
+        System.out.print(shapes[0].colour);
         return (shapes);
 
     }
