@@ -28,7 +28,6 @@ abstract class Shape {
     int y;
     int r;
     String colour="0,0,255";
-    Color c=Color.web("rgb("+colour+")");
     int start;
     int border;
     //set default border colour in case not specified
@@ -62,6 +61,7 @@ class Circle extends Shape {
 
     @Override
     void draw(Group root) {
+        Color c=Color.web("rgb("+colour+")");
         circle1.setRadius(r);
         circle1.setVisible(true);
         circle1.setFill(c);
@@ -84,6 +84,7 @@ class Rectangle extends Shape {
 
     @Override
     void draw(Group root) {
+        Color c=Color.web("rgb("+colour+")");
         rectangle1.setX(x);
         rectangle1.setY(y);
         rectangle1.setVisible(true);
@@ -102,6 +103,7 @@ javafx.scene.shape.Line line1 = new javafx.scene.shape.Line();
     }
     @Override
     void draw(Group root) {
+        Color c=Color.web("rgb("+colour+")");
         line1.setVisible(true);
         line1.setStroke(c);
         line1.setStartX(startX);
@@ -336,14 +338,14 @@ class ap {
     }
 }
 
-public class animationPlayer extends Application {
+public class Animationplayer extends Application {
 
     @Override
     public void start(Stage primaryStage) {
         Group root = new Group();
         Scene scene = new Scene(root, 600, 600);
         ap a1 = new ap();
-        Shape[] shapes = a1.loadAnimationFromFile("/Users/carts/Downloads/animation1.txt");
+        Shape[] shapes = a1.loadAnimationFromFile("/Users/giannacasselli/Downloads/animation1.txt");
         //launch(args);
         int i;
         for (i = 0; i < shapes.length; i++) {
@@ -356,10 +358,9 @@ public class animationPlayer extends Application {
 
     public static void main(String[] args) {
         ap a1 = new ap();
-        Shape[] shapes = a1.loadAnimationFromFile("/Users/carts/Downloads/animation1.txt");
+        Shape[] shapes = a1.loadAnimationFromFile("/Users/giannacasselli/Downloads/animation1.txt");
         //System.out.print(shapes[1].x);
         launch(args);
 
     }
 }
-
