@@ -161,7 +161,7 @@ class Show extends Effect {
     void play(javafx.scene.shape.Shape shape, Timeline timeline) {
         //first parameter is start time
         KeyFrame showFrame = new KeyFrame(Duration.seconds(1), event -> {
-            shape.setVisible(false);
+            shape.setVisible(true);
         }
         );
 
@@ -172,7 +172,18 @@ class Show extends Effect {
 }
 
 class Hide extends Effect {
+    
+        void play(javafx.scene.shape.Shape shape, Timeline timeline) {
+        //first parameter is start time
+        KeyFrame showFrame = new KeyFrame(Duration.seconds(1), event -> {
+            shape.setVisible(false);
+        }
+        );
 
+        //adds keyframe to timeline
+        timeline.getKeyFrames().add(showFrame);
+
+    }
 }
 
 class Jump extends Effect {
@@ -198,6 +209,15 @@ class Jump extends Effect {
         if (y > 0) {
             this.y = y;
         }
+    }
+    
+    void play(javafx.scene.shape.Shape shape, Timeline timeline) {
+        //first parameter is start time
+        KeyFrame showFrame = new KeyFrame(Duration.seconds(2), event -> {
+            shape.setTranslateX(-300);
+            shape.setTranslateY(-300);
+        });
+        timeline.getKeyFrames().add(showFrame);
     }
 
 }
@@ -323,7 +343,6 @@ class ap {
                     shapes[i].effects.get(shapes[i].effects.size() - 1).setStart(Integer.parseInt(info[i][j + 1].substring(7)));
                     j += 2;
                 } else if (info[i][j].contains("Jump")) {
-                    //shapes[i].Jump(Integer.parseInt(info[i][j + 1].substring(7)), Integer.parseInt(info[i][j + 2].substring(3)), Integer.parseInt(info[i][j + 3].substring(3)));
                     shapes[i].effects.add(new Jump());
                     //sets variables start,x,y
                     shapes[i].effects.get(shapes[i].effects.size() - 1).setStart(Integer.parseInt(info[i][j + 1].substring(7)));
@@ -341,8 +360,6 @@ class ap {
                     shapes[i].x = Integer.parseInt(info[i][j].substring(3));
                 } else if (info[i][j].contains("y:")) {
                     shapes[i].y = Integer.parseInt(info[i][j].substring(3));
-                } else if (info[i][j].contains("effect")) {
-                    j++;
                 } else if (info[i][j].contains("length")) {
                     shapes[i].length = Integer.parseInt(info[i][j].substring(8));
                 } else if (info[i][j].contains("width")) {
@@ -380,7 +397,7 @@ public class animationPlayer extends Application {
         Group root = new Group();
         Scene scene = new Scene(root, 600, 600);
         ap a1 = new ap();
-        Shape[] shapes = a1.loadAnimationFromFile("/Users/phant/OneDrive/Desktop/finalProjectRepo/finalProject/animation1.txt");
+        Shape[] shapes = a1.loadAnimationFromFile("/Users/carts/downloads/animation1.txt");
         //launch(args);
         int i;
         for (i = 0; i < shapes.length; i++) {
@@ -405,16 +422,19 @@ public class animationPlayer extends Application {
 
         Show show = new Show();
         show.play(shapes[0].getShape(), timeline);
+        
+        Jump jump = new Jump();
+        jump.play(shapes[0].getShape(), timeline);
 
-        timeline.play();
+
+        timeline.play();        
 
     }
 
     public static void main(String[] args) {
-        ap a1 = new ap();
-        //Shape[] shapes = a1.loadAnimationFromFile("/Users/giannacasselli/Downloads/animation1.txt");
-        //System.out.print(shapes[1].x);
         launch(args);
+        
 
     }
 }
+
