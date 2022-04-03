@@ -226,12 +226,39 @@ class Jump extends Effect {
 }
 
 class ChangeColour extends Effect {
+    String newcolour="0,0,255";
 
-    Color setColour(String colour1, int start) {
-        String rgb = "rgb(";
-        Color c = Color.web(rgb + colour1 + ")");
-        return c;
-    }
+    void play(javafx.scene.shape.Shape shape, Timeline timeline) {
+        //first parameter is start time
+        //Color c= Color.web("rgb("+colour1+")");
+        Color c= Color.web("rgb("+newcolour+")");
+        if(shape instanceof javafx.scene.shape.Circle)
+        {
+            KeyFrame showFrame = new KeyFrame(Duration.seconds(1), event -> {
+            shape.setFill(c);
+            }
+            );
+            timeline.getKeyFrames().add(showFrame);
+        }
+        else if(shape instanceof javafx.scene.shape.Rectangle)
+        {
+            KeyFrame showFrame = new KeyFrame(Duration.seconds(1), event -> {
+            shape.setFill(c);
+            }
+            );
+            timeline.getKeyFrames().add(showFrame);
+            System.out.println("HI");
+        }
+        else if(shape instanceof javafx.scene.shape.Line)
+        {
+            KeyFrame showFrame = new KeyFrame(Duration.seconds(1), event -> {
+            shape.setStroke(c);
+            }
+            );
+            timeline.getKeyFrames().add(showFrame);
+        }
+        timeline.play();
+   }
 
 }
 
@@ -354,13 +381,15 @@ class ap {
                     j += 4;
                    
                     
-                } else if (info[i][j].contains("Change")) {
+                }  else if (info[i][j].contains("Change")) {
+                    System.out.println("hello");
                     shapes[i].effects.add(new ChangeColour());
-
+                    ((ChangeColour)shapes[i].effects.get(shapes[i].effects.size() - 1)).newcolour=info[i][j].substring(16);
                     shapes[i].effects.get(shapes[i].effects.size() - 1).setStart(Integer.parseInt(info[i][j + 1].substring(7)));
+                    //((ChangeColour) shapes[i].effects.get(shapes[i].effects.size() - 1)).play(shapes[i].getShape(),timeline,info[i][j].substring(16));
                     //((ChangeColour) shapes[i].effects.get(shapes[i]));
                     //shapes[i].ChangeColour(Integer.parseInt(info[i][j + 1].substring(7)), info[i][j + 2].substring(8));
-                    //j += 3;
+                    j +=4;
                 } else if (info[i][j].contains("x:")) {
                     shapes[i].x = Integer.parseInt(info[i][j].substring(3));
                 } else if (info[i][j].contains("y:")) {
@@ -430,6 +459,9 @@ public class animationPlayer extends Application {
         
         Jump jump = new Jump();
         shapes[0].effects.get(1).play(shapes[0].getShape(), timeline);
+        ChangeColour change=new ChangeColour();
+        change.play(shapes[1].getShape(),timeline);
+
 
 
         timeline.play();        
