@@ -1,4 +1,4 @@
-package finalproject;
+package animationplayer;
 
 import java.util.ArrayList;
 
@@ -177,6 +177,7 @@ class Show extends Effect {
 
 class Hide extends Effect {
     
+        @Override
         void play(javafx.scene.shape.Shape shape, Timeline timeline) {
         //first parameter is start time
         KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ap.speed), event -> {
@@ -214,7 +215,7 @@ class Jump extends Effect {
             this.y = y;
         }
     }
-    
+    @Override
     void play(javafx.scene.shape.Shape shape, Timeline timeline) {
         //first parameter is start time
         KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ap.speed), event -> {
@@ -226,12 +227,25 @@ class Jump extends Effect {
 }
 
 class ChangeColour extends Effect {
-    String newcolour="0,0,255";
+    Color c;
+    String colour;
+    static int count=0;
+    ChangeColour()
+    {
+        count++;
+        this.colour="0,0,255";
+    }
+    void setColor(String colour1)
+    {
+        this.colour=colour1;
+        System.out.println(colour1+"is working");
+        this.c=Color.web("rgb("+colour+")");
+        System.out.print(c);
 
+    }
+
+    @Override
     void play(javafx.scene.shape.Shape shape, Timeline timeline) {
-        //first parameter is start time
-        //Color c= Color.web("rgb("+colour1+")");
-        Color c= Color.web("rgb("+newcolour+")");
         if(shape instanceof javafx.scene.shape.Circle)
         {
             KeyFrame showFrame = new KeyFrame(Duration.seconds(1), event -> {
@@ -247,7 +261,7 @@ class ChangeColour extends Effect {
             }
             );
             timeline.getKeyFrames().add(showFrame);
-            System.out.println("HI");
+            //System.out.println(newcolour);
         }
         else if(shape instanceof javafx.scene.shape.Line)
         {
@@ -258,6 +272,7 @@ class ChangeColour extends Effect {
             timeline.getKeyFrames().add(showFrame);
         }
         timeline.play();
+        System.out.print("\n"+count);
    }
 
 }
@@ -358,9 +373,9 @@ class ap {
             for (j = 2; j < info[i].length; j++) {
                 //cases for different info types
                 //assign info to shape object
-                if ((info[i][j].contains("r:")) && !(info[i][j].contains("c")) && !(info[i][j].contains("b"))) {
+                if ((info[i][j].contains("r:")) && !(info[i][j].contains("c")) && !(info[i][j].contains("b"))&&!(info[i][j].contains("C"))) {
                     shapes[i].r = Integer.parseInt(info[i][j].substring(3));
-                } else if (info[i][j].contains("colour:")) {
+                } else if (info[i][j].contains("colour:")&&!(info[i][j].contains("Change"))) {
                     shapes[i].colour = info[i][j].substring(8);
                 } else if (info[i][j].contains("Hide")) {
                     shapes[i].effects.add(new Hide());
@@ -382,10 +397,11 @@ class ap {
                    
                     
                 }  else if (info[i][j].contains("Change")) {
-                    System.out.println("hello");
                     shapes[i].effects.add(new ChangeColour());
-                    ((ChangeColour)shapes[i].effects.get(shapes[i].effects.size() - 1)).newcolour=info[i][j].substring(16);
+                    ((ChangeColour)shapes[i].effects.get(shapes[i].effects.size() - 1)).setColor(info[i][j].substring(14));
+                    System.out.print(shapes[i].colour+"\n");
                     shapes[i].effects.get(shapes[i].effects.size() - 1).setStart(Integer.parseInt(info[i][j + 1].substring(7)));
+                    //System.out.println("wagwan");
                     //((ChangeColour) shapes[i].effects.get(shapes[i].effects.size() - 1)).play(shapes[i].getShape(),timeline,info[i][j].substring(16));
                     //((ChangeColour) shapes[i].effects.get(shapes[i]));
                     //shapes[i].ChangeColour(Integer.parseInt(info[i][j + 1].substring(7)), info[i][j + 2].substring(8));
@@ -424,25 +440,33 @@ class ap {
     }
 }
 
-public class animationPlayer extends Application {
+public class Animationplayer extends Application {
 
     @Override
     public void start(Stage primaryStage) {
         Group root = new Group();
         Scene scene = new Scene(root, 600, 600);
         ap a1 = new ap();
-        Shape[] shapes = a1.loadAnimationFromFile("/Users/carts/downloads/animation1.txt");
+        Shape[] shapes = a1.loadAnimationFromFile("/Users/giannacasselli/Downloads/animation1.txt");
         //launch(args);
         int i;
-        for (i = 0; i < shapes.length; i++) {
+        /*for (i = 0; i < shapes.length; i++) {
             shapes[i].draw(root);
-        }
+        }*/
         primaryStage.setScene(scene);
         primaryStage.show();
 
         //parameter is frame rate
         Timeline timeline = new Timeline(ap.speed);
         timeline.setCycleCount(1);
+        for(Shape shape:shapes)
+        {
+            shape.draw(root);
+            for(Effect effect:shape.effects)
+            {
+                effect.play(shape.getShape(), timeline);
+            }
+        }
 
         //first parameter is start time
         KeyFrame stopFrame = new KeyFrame(Duration.seconds(ap.frames / ap.speed), event -> {
@@ -454,16 +478,17 @@ public class animationPlayer extends Application {
         //adds keyframe to timeline
         timeline.getKeyFrames().add(stopFrame);
 
-        Show show = new Show();
+        /*Show show = new Show();
         show.play(shapes[0].getShape(), timeline);
         
         Jump jump = new Jump();
         shapes[0].effects.get(1).play(shapes[0].getShape(), timeline);
         ChangeColour change=new ChangeColour();
-        change.play(shapes[1].getShape(),timeline);
+        shapes[1].effects.get(1).play(shapes[1].getShape(), timeline);
+        //shapes[1].effects.get(1).play(shapes[1].getShape(), timeline);
 
 
-
+*/
         timeline.play();        
 
     }
