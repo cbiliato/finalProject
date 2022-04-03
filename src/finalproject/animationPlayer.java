@@ -1,4 +1,4 @@
-package animationplayer;
+package finalproject;
 
 import java.util.ArrayList;
 
@@ -248,7 +248,7 @@ class ChangeColour extends Effect {
     void play(javafx.scene.shape.Shape shape, Timeline timeline) {
         if(shape instanceof javafx.scene.shape.Circle)
         {
-            KeyFrame showFrame = new KeyFrame(Duration.seconds(1), event -> {
+            KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ap.speed), event -> {
             shape.setFill(c);
             }
             );
@@ -256,7 +256,7 @@ class ChangeColour extends Effect {
         }
         else if(shape instanceof javafx.scene.shape.Rectangle)
         {
-            KeyFrame showFrame = new KeyFrame(Duration.seconds(1), event -> {
+            KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ap.speed), event -> {
             shape.setFill(c);
             }
             );
@@ -265,7 +265,7 @@ class ChangeColour extends Effect {
         }
         else if(shape instanceof javafx.scene.shape.Line)
         {
-            KeyFrame showFrame = new KeyFrame(Duration.seconds(1), event -> {
+            KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ap.speed), event -> {
             shape.setStroke(c);
             }
             );
@@ -440,14 +440,14 @@ class ap {
     }
 }
 
-public class Animationplayer extends Application {
+public class animationPlayer extends Application {
 
     @Override
     public void start(Stage primaryStage) {
         Group root = new Group();
         Scene scene = new Scene(root, 600, 600);
         ap a1 = new ap();
-        Shape[] shapes = a1.loadAnimationFromFile("/Users/giannacasselli/Downloads/animation1.txt");
+        Shape[] shapes = a1.loadAnimationFromFile("/Users/carts/Downloads/animation1.txt");
         //launch(args);
         int i;
         /*for (i = 0; i < shapes.length; i++) {
@@ -499,3 +499,4 @@ public class Animationplayer extends Application {
 
     }
 }
+
