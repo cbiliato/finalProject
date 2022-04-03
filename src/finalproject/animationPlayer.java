@@ -49,30 +49,34 @@ abstract class Shape {
         //updates everytime an object is made
         count++;
     }
-
+    
+    //needs to be specific shape
     abstract void draw(Group root);
-
+    
+    //general shape
     abstract javafx.scene.shape.Shape getShape();
 }
 
 class Circle extends Shape {
-
+    
+    //couldnt call upon class circle because we already have circle class
     javafx.scene.shape.Circle circle1 = new javafx.scene.shape.Circle();
 
     Circle() {
 
     }
 
+        //attributes for circle
     @Override
     void draw(Group root) {
-        Color c = Color.web("rgb(" + colour + ")");
+        Color c = Color.web("rgb(" + colour + ")"); //turn string into color value
         circle1.setRadius(r);
         circle1.setVisible(true);
         circle1.setFill(c);
         circle1.setCenterX(x);
         circle1.setCenterY(y);
 
-        root.getChildren().add(circle1);
+        root.getChildren().add(circle1); //putting circle onto parent node
     }
 
     @Override
@@ -138,11 +142,11 @@ class Line extends Shape {
 
 }
 
-class Effect {
+class Effect { //parent class effect
 
-    private int start;
+    private int start; //specifies frames start
 
-    void play() {
+    void play(javafx.scene.shape.Shape shape, Timeline timeline) {
     }
 
     int getStart() {
@@ -158,9 +162,9 @@ class Effect {
 
 class Show extends Effect {
 
-    void play(javafx.scene.shape.Shape shape, Timeline timeline) {
+    void play(javafx.scene.shape.Shape shape, Timeline timeline) { //to put keyframe into the timeline
         //first parameter is start time
-        KeyFrame showFrame = new KeyFrame(Duration.seconds(1), event -> {
+        KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ap.speed), event -> {
             shape.setVisible(true);
         }
         );
@@ -175,7 +179,7 @@ class Hide extends Effect {
     
         void play(javafx.scene.shape.Shape shape, Timeline timeline) {
         //first parameter is start time
-        KeyFrame showFrame = new KeyFrame(Duration.seconds(1), event -> {
+        KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ap.speed), event -> {
             shape.setVisible(false);
         }
         );
@@ -188,7 +192,7 @@ class Hide extends Effect {
 
 class Jump extends Effect {
 
-    private int x;
+    private int x; //coordinates
     private int y;
 
     int getX() {
@@ -213,9 +217,8 @@ class Jump extends Effect {
     
     void play(javafx.scene.shape.Shape shape, Timeline timeline) {
         //first parameter is start time
-        KeyFrame showFrame = new KeyFrame(Duration.seconds(2), event -> {
-            shape.setTranslateX(-300);
-            shape.setTranslateY(-300);
+        KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ap.speed), event -> {
+            shape.relocate(x,y);
         });
         timeline.getKeyFrames().add(showFrame);
     }
@@ -349,6 +352,8 @@ class ap {
                     ((Jump) shapes[i].effects.get(shapes[i].effects.size() - 1)).setX(Integer.parseInt(info[i][j + 2].substring(3)));
                     ((Jump) shapes[i].effects.get(shapes[i].effects.size() - 1)).setY(Integer.parseInt(info[i][j + 3].substring(3)));
                     j += 4;
+                   
+                    
                 } else if (info[i][j].contains("Change")) {
                     shapes[i].effects.add(new ChangeColour());
 
@@ -424,7 +429,7 @@ public class animationPlayer extends Application {
         show.play(shapes[0].getShape(), timeline);
         
         Jump jump = new Jump();
-        jump.play(shapes[0].getShape(), timeline);
+        shapes[0].effects.get(1).play(shapes[0].getShape(), timeline);
 
 
         timeline.play();        
@@ -437,4 +442,3 @@ public class animationPlayer extends Application {
 
     }
 }
-
