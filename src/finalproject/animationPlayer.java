@@ -1,4 +1,4 @@
-package animationplayer;
+package finalproject;
 
 import java.util.ArrayList;
 
@@ -7,23 +7,26 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.lang.*;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.util.Duration;
 
+/**
+ * Abstract class Shape is the parent class of all the shapes, each shape 
+ * contains components from the Shape class and applies the features to display
+ * from the timeline to the scene.
+ * 
+ * @author Group 8
+ * @version JDK 1.8.0_321
+ * @since 2022-04-02
+ */
 abstract class Shape {
-
     javafx.scene.shape.Shape shape;
 
     int x;
@@ -40,8 +43,8 @@ abstract class Shape {
     int startY;
     int endX;
     int endY;
-    //made this to make sure objects were actually being created
-    //in the load animation mathod
+    //so objects are actually created
+    //in the load animation method
     static int count;
     ArrayList<Effect> effects = new ArrayList<Effect>(0);
 
@@ -56,7 +59,13 @@ abstract class Shape {
     //general shape
     abstract javafx.scene.shape.Shape getShape();
 }
-
+/**
+ * Circle is the child class of Shape parent class.
+ * 
+ * @author Group 8
+ * @version JDK 1.8.0_321
+ * @since 2022-04-02
+ */
 class Circle extends Shape {
     
     //couldnt call upon class circle because we already have circle class
@@ -84,7 +93,13 @@ class Circle extends Shape {
         return circle1;
     }
 }
-
+/**
+ * Rectangle is the child class of Shape parent class.
+ * 
+ * @author Group 8
+ * @version JDK 1.8.0_321
+ * @since 2022-04-02
+ */
 class Rectangle extends Shape {
 
     javafx.scene.shape.Rectangle rectangle1 = new javafx.scene.shape.Rectangle();
@@ -112,7 +127,13 @@ class Rectangle extends Shape {
         return rectangle1;
     }
 }
-
+/**
+ * Line is the child class of Shape parent class.
+ * 
+ * @author Group 8
+ * @version JDK 1.8.0_321
+ * @since 2022-04-02
+ */
 class Line extends Shape {
 
     javafx.scene.shape.Line line1 = new javafx.scene.shape.Line();
@@ -139,10 +160,18 @@ class Line extends Shape {
         return line1;
     }
 }
+/**
+ * The Effect class is the parent class of all the effects, each effect
+ * contains components from the Effect class and applies the features to display
+ * from the timeline to the scene.
+ * 
+ * @author Group 8
+ * @version JDK 1.8.0_321
+ * @since 2022-04-02
+ */
+class Effect {
 
-class Effect { //parent class effect
-
-    private int start; //specifies frames start
+    private int start;
 
     void play(javafx.scene.shape.Shape shape, Timeline timeline) {
     }
@@ -157,13 +186,20 @@ class Effect { //parent class effect
         }
     }
 }
-
+/**
+ * Show is the child class of Effects parent class. The Show class allows the
+ * shape to appear on the screen.
+ * 
+ * @author Group 8
+ * @version JDK 1.8.0_321
+ * @since 2022-04-02
+ */
 class Show extends Effect {
 
     @Override
     void play(javafx.scene.shape.Shape shape, Timeline timeline) { //to put keyframe into the timeline
         //first parameter is start time
-        KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ap.speed), event -> {
+        KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ApplicationPlayer.speed), event -> {
             shape.setVisible(true);
         }
         );
@@ -171,13 +207,20 @@ class Show extends Effect {
         timeline.getKeyFrames().add(showFrame);
     }
 }
-
+/**
+ * Hide is the child class of Effects parent class. The Hide class allows the
+ * shape to be removed from the screen.
+ * 
+ * @author Group 8
+ * @version JDK 1.8.0_321
+ * @since 2022-04-02
+ */
 class Hide extends Effect {
     
         @Override
         void play(javafx.scene.shape.Shape shape, Timeline timeline) {
         //first parameter is start time
-        KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ap.speed), event -> {
+        KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ApplicationPlayer.speed), event -> {
             shape.setVisible(false);
         }
         );
@@ -185,7 +228,14 @@ class Hide extends Effect {
         timeline.getKeyFrames().add(showFrame);
     }
 }
-
+/**
+ * Jump is the child class of Effects parent class. The jump class allows for the 
+ * shape to appear in another place on the screen.
+ * 
+ * @author Group 8
+ * @version JDK 1.8.0_321
+ * @since 2022-04-02
+ */
 class Jump extends Effect {
 
     private int x; //coordinates
@@ -209,13 +259,20 @@ class Jump extends Effect {
     @Override
     void play(javafx.scene.shape.Shape shape, Timeline timeline) {
         //first parameter is start time
-        KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ap.speed), event -> {
+        KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ApplicationPlayer.speed), event -> {
             shape.relocate(x,y);
         });
         timeline.getKeyFrames().add(showFrame);
     }
 }
-
+/**
+ * ChangeColour is the child class of Effects parent class. The ChangeColour class allows 
+ * for the shape to appear as a different color.
+ * 
+ * @author Group 8
+ * @version JDK 1.8.0_321
+ * @since 2022-04-02
+ */
 class ChangeColour extends Effect {
     Color c;
     String colour;
@@ -234,7 +291,7 @@ class ChangeColour extends Effect {
     void play(javafx.scene.shape.Shape shape, Timeline timeline) {
         if(shape instanceof javafx.scene.shape.Circle)
         {
-            KeyFrame showFrame = new KeyFrame(Duration.seconds(1), event -> {
+            KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ApplicationPlayer.speed), event -> {
             shape.setFill(c);
             }
             );
@@ -242,7 +299,7 @@ class ChangeColour extends Effect {
         }
         else if(shape instanceof javafx.scene.shape.Rectangle)
         {
-            KeyFrame showFrame = new KeyFrame(Duration.seconds(1), event -> {
+            KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ApplicationPlayer.speed), event -> {
             shape.setFill(c);
             }
             );
@@ -250,7 +307,7 @@ class ChangeColour extends Effect {
         }
         else if(shape instanceof javafx.scene.shape.Line)
         {
-            KeyFrame showFrame = new KeyFrame(Duration.seconds(1), event -> {
+            KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ApplicationPlayer.speed), event -> {
             shape.setStroke(c);
             }
             );
@@ -259,21 +316,25 @@ class ChangeColour extends Effect {
         timeline.play();
    }
 }
-
-class ap {
+/**
+ * The ApplicationPlayer class takes on the information stored in the text file.
+ * With this, it then extracts the data on a shape by shape basis and deciphers
+ * the important information that the program needs to know.
+ * 
+ * @author Group 8
+ * @version JDK 1.8.0_321
+ * @since 2022-04-02
+ */
+class ApplicationPlayer {
 
     static int frames;
     static int speed;
     static int numObjs;
 
     public Shape[] loadAnimationFromFile(String FileName) {
-        //there a LOT
-        //im gonna comment in case it gets too confusing
-        //text me if something doesnt make sense
-
-        //create new file to be read
+        //creating new file to be read
         File newfile = new File(FileName);
-        //create empty string to read the file to
+        //creating empty string to read the file to
         String data = "";
         try {
             //read all lines of the file to the string
@@ -284,7 +345,7 @@ class ap {
             }
             //catch if file is not found
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(ap.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ApplicationPlayer.class.getName()).log(Level.SEVERE, null, ex);
         }
         //debug
         System.out.print(data);
@@ -329,7 +390,7 @@ class ap {
             //debug
             //System.out.print(info[1][0]);
 
-            //now, we create the objects and put them into the shapes array
+            //creating the objects and put them into the shapes array
             for (i = 0; i < numObjs; i++) {
                 //since first line is always blank, second index starts at 1, not 0
                 switch (info[i][1]) {
@@ -416,15 +477,22 @@ class ap {
         }
     }
 }
-
-public class Animationplayer extends Application {
+/**
+ * The public class FinalProject is the child class of import parent class 
+ * Application.
+ * 
+ * @author Group 8
+ * @version JDK 1.8.0_321
+ * @since 2022-04-02
+ */
+public class FinalProject extends Application {
 
     @Override
     public void start(Stage primaryStage) {
         Group root = new Group();
         Scene scene = new Scene(root, 600, 600);
-        ap a1 = new ap();
-        Shape[] shapes = a1.loadAnimationFromFile("/Users/giannacasselli/Downloads/animation1.txt");
+        ApplicationPlayer a1 = new ApplicationPlayer();
+        Shape[] shapes = a1.loadAnimationFromFile("/Users/carts/Downloads/animation1.txt");
         //launch(args);
         int i;
         /*for (i = 0; i < shapes.length; i++) {
@@ -434,7 +502,7 @@ public class Animationplayer extends Application {
         primaryStage.show();
 
         //parameter is frame rate
-        Timeline timeline = new Timeline(ap.speed);
+        Timeline timeline = new Timeline(ApplicationPlayer.speed);
         timeline.setCycleCount(1);
         for(Shape shape:shapes)
         {
@@ -445,7 +513,7 @@ public class Animationplayer extends Application {
             }
         }
         //first parameter is start time
-        KeyFrame stopFrame = new KeyFrame(Duration.seconds(ap.frames / ap.speed), event -> {
+        KeyFrame stopFrame = new KeyFrame(Duration.seconds(ApplicationPlayer.frames / ApplicationPlayer.speed), event -> {
             timeline.stop();
             primaryStage.close();
         }
