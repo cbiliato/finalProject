@@ -539,7 +539,7 @@ class ApplicationPlayer {
  * @version JDK 1.8.0_321
  * @since 2022-04-02
  */
-public class animationPlayer extends Application {
+public class AnimationPlayer extends Application {
 
     @Override
     public void start(Stage primaryStage) {
