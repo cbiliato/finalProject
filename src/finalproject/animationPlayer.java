@@ -1,4 +1,4 @@
-package finalproject;
+package animationplayer;
 
 import java.util.ArrayList;
 
@@ -92,7 +92,6 @@ class Rectangle extends Shape {
     Rectangle() {
         //debug
         //System.out.print(count);
-
     }
 
     @Override
@@ -139,7 +138,6 @@ class Line extends Shape {
     javafx.scene.shape.Line getShape() {
         return line1;
     }
-
 }
 
 class Effect { //parent class effect
@@ -162,16 +160,15 @@ class Effect { //parent class effect
 
 class Show extends Effect {
 
+    @Override
     void play(javafx.scene.shape.Shape shape, Timeline timeline) { //to put keyframe into the timeline
         //first parameter is start time
         KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ap.speed), event -> {
             shape.setVisible(true);
         }
         );
-
         //adds keyframe to timeline
         timeline.getKeyFrames().add(showFrame);
-
     }
 }
 
@@ -184,10 +181,8 @@ class Hide extends Effect {
             shape.setVisible(false);
         }
         );
-
         //adds keyframe to timeline
         timeline.getKeyFrames().add(showFrame);
-
     }
 }
 
@@ -195,21 +190,17 @@ class Jump extends Effect {
 
     private int x; //coordinates
     private int y;
-
     int getX() {
         return x;
     }
-
     void setX(int x) {
         if (x > 0) {
             this.x = x;
         }
     }
-
     int getY() {
         return y;
     }
-
     void setY(int y) {
         if (y > 0) {
             this.y = y;
@@ -223,7 +214,6 @@ class Jump extends Effect {
         });
         timeline.getKeyFrames().add(showFrame);
     }
-
 }
 
 class ChangeColour extends Effect {
@@ -238,17 +228,13 @@ class ChangeColour extends Effect {
     void setColor(String colour1)
     {
         this.colour=colour1;
-        System.out.println(colour1+"is working");
         this.c=Color.web("rgb("+colour+")");
-        System.out.print(c);
-
     }
-
     @Override
     void play(javafx.scene.shape.Shape shape, Timeline timeline) {
         if(shape instanceof javafx.scene.shape.Circle)
         {
-            KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ap.speed), event -> {
+            KeyFrame showFrame = new KeyFrame(Duration.seconds(1), event -> {
             shape.setFill(c);
             }
             );
@@ -256,25 +242,22 @@ class ChangeColour extends Effect {
         }
         else if(shape instanceof javafx.scene.shape.Rectangle)
         {
-            KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ap.speed), event -> {
+            KeyFrame showFrame = new KeyFrame(Duration.seconds(1), event -> {
             shape.setFill(c);
             }
             );
             timeline.getKeyFrames().add(showFrame);
-            //System.out.println(newcolour);
         }
         else if(shape instanceof javafx.scene.shape.Line)
         {
-            KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ap.speed), event -> {
+            KeyFrame showFrame = new KeyFrame(Duration.seconds(1), event -> {
             shape.setStroke(c);
             }
             );
             timeline.getKeyFrames().add(showFrame);
         }
         timeline.play();
-        System.out.print("\n"+count);
    }
-
 }
 
 class ap {
@@ -308,146 +291,140 @@ class ap {
         //create array of strings from original data file
         //this file will be separated by two new line characters
         //i.e. the specs of the animation, and each object in the animation
-        String[] objs = data.split("\n\n");
-        //the specs of the animation will be put into its own array of strings
-        //so data can be extracted
-        //split at new line character
-        String[] specs = objs[0].split("\n");
-        //total number of frames is always first line
-        frames = Integer.parseInt(specs[0].substring(8, '\n' + 1));
-        //speed is always second
-        speed = Integer.parseInt(specs[1].substring(7, '\n' - 1));
-        //total number of objects is always third
-        numObjs = Integer.parseInt(specs[2].substring(0));
-        //System.out.print(numObjs);
-        //now that the specs data has been extracted, move on to 
-        //the actual objects data
+        try{
+            String[] objs = data.split("\n\n");
+            //the specs of the animation will be put into its own array of strings
+            //so data can be extracted
+            //split at new line character
+            String[] specs = objs[0].split("\n");
+            //total number of frames is always first line
+            frames = Integer.parseInt(specs[0].substring(8, '\n' + 1));
+            //speed is always second
+            speed = Integer.parseInt(specs[1].substring(7, '\n' - 1));
+            //total number of objects is always third
+            numObjs = Integer.parseInt(specs[2].substring(0));
+            //System.out.print(numObjs);
+            //now that the specs data has been extracted, move on to 
+            //the actual objects data
+        
+            //create array of objects of type shape
+            //this is the parent class so each category of shape
+            //can be specified when data is read
+            Shape[] shapes;
+            //size of shape array is the number of objects as specified
+            //in the specs data
+            shapes = new Shape[numObjs];
+            //this is where it gets confusing, bare with me
 
-        //create array of objects of type shape
-        //this is the parent class so each category of shape
-        //can be specified when data is read
-        Shape[] shapes;
-        //size of shape array is the number of objects as specified
-        //in the specs data
-        shapes = new Shape[numObjs];
-        //this is where it gets confusing, bare with me
-
-        //create an array of arrays of strings
-        //first index represents object number
-        //second index is line number within that objects info block in .txt file
-        String[][] info = new String[numObjs][];
-        int i;
-        //split each object into array of strings
-        //split by new line character
-        for (i = 1; i <= numObjs; i++) {
-            info[i - 1] = objs[i].split("\n");
-        }
-        //debug
-        //System.out.print(info[1][0]);
-
-        //now, we create the objects and put them into the shapes array
-        for (i = 0; i < numObjs; i++) {
-            //since first line is always blank, second index starts at 1, not 0
-            switch (info[i][1]) {
-                case ("Circle"):
-                    shapes[i] = new Circle();
-                    break;
-                case ("Rect"):
-                    shapes[i] = new Rectangle();
-                    break;
-                case ("Line"):
-                    shapes[i] = new Line();
-                    break;
-                default:
-                    break;
+            //create an array of arrays of strings
+            //first index represents object number
+            //second index is line number within that objects info block in .txt file
+            String[][] info = new String[numObjs][];
+            int i;
+            //split each object into array of strings
+            //split by new line character
+            for (i = 1; i <= numObjs; i++) {
+                info[i - 1] = objs[i].split("\n");
             }
+            //debug
+            //System.out.print(info[1][0]);
 
-        }
-        //now, we extrapolate the data on a case by case basis
-        int j;
-        //loop to index through the number of shapes
-        for (i = 0; i < numObjs; i++) {
-            //second loop to index through the individual line of info
-            //for each shape
-            //loop index starts at 2 to skip unnecessary info
-            for (j = 2; j < info[i].length; j++) {
-                //cases for different info types
-                //assign info to shape object
-                if ((info[i][j].contains("r:")) && !(info[i][j].contains("c")) && !(info[i][j].contains("b"))&&!(info[i][j].contains("C"))) {
-                    shapes[i].r = Integer.parseInt(info[i][j].substring(3));
-                } else if (info[i][j].contains("colour:")&&!(info[i][j].contains("Change"))) {
-                    shapes[i].colour = info[i][j].substring(8);
-                } else if (info[i][j].contains("Hide")) {
-                    shapes[i].effects.add(new Hide());
-                    //sets start variable
-                    shapes[i].effects.get(shapes[i].effects.size() - 1).setStart(Integer.parseInt(info[i][j + 1].substring(7)));
-                    j += 2;
-                } else if (info[i][j].contains("Show")) {
-                    shapes[i].effects.add(new Show());
-                    //sets start variable
-                    shapes[i].effects.get(shapes[i].effects.size() - 1).setStart(Integer.parseInt(info[i][j + 1].substring(7)));
-                    j += 2;
-                } else if (info[i][j].contains("Jump")) {
-                    shapes[i].effects.add(new Jump());
-                    //sets variables start,x,y
-                    shapes[i].effects.get(shapes[i].effects.size() - 1).setStart(Integer.parseInt(info[i][j + 1].substring(7)));
-                    ((Jump) shapes[i].effects.get(shapes[i].effects.size() - 1)).setX(Integer.parseInt(info[i][j + 2].substring(3)));
-                    ((Jump) shapes[i].effects.get(shapes[i].effects.size() - 1)).setY(Integer.parseInt(info[i][j + 3].substring(3)));
-                    j += 4;
-                   
-                    
-                }  else if (info[i][j].contains("Change")) {
-                    shapes[i].effects.add(new ChangeColour());
-                    ((ChangeColour)shapes[i].effects.get(shapes[i].effects.size() - 1)).setColor(info[i][j].substring(14));
-                    System.out.print(shapes[i].colour+"\n");
-                    shapes[i].effects.get(shapes[i].effects.size() - 1).setStart(Integer.parseInt(info[i][j + 1].substring(7)));
-                    //System.out.println("wagwan");
-                    //((ChangeColour) shapes[i].effects.get(shapes[i].effects.size() - 1)).play(shapes[i].getShape(),timeline,info[i][j].substring(16));
-                    //((ChangeColour) shapes[i].effects.get(shapes[i]));
-                    //shapes[i].ChangeColour(Integer.parseInt(info[i][j + 1].substring(7)), info[i][j + 2].substring(8));
-                    j +=4;
-                } else if (info[i][j].contains("x:")) {
-                    shapes[i].x = Integer.parseInt(info[i][j].substring(3));
-                } else if (info[i][j].contains("y:")) {
-                    shapes[i].y = Integer.parseInt(info[i][j].substring(3));
-                } else if (info[i][j].contains("length")) {
-                    shapes[i].length = Integer.parseInt(info[i][j].substring(8));
-                } else if (info[i][j].contains("width")) {
-                    shapes[i].width = Integer.parseInt(info[i][j].substring(7));
-                } else if ((info[i][j].contains("border")) && !(info[i][j].contains("l"))) {
-                    shapes[i].border = Integer.parseInt(info[i][j].substring(8));
-                } else if ((info[i][j].contains("border")) && (info[i][j].contains("l"))) {
-                    shapes[i].borderColour = info[i][j].substring(15);
-                } else if (info[i][j].contains("startX")) {
-                    shapes[i].startX = Integer.parseInt(info[i][j].substring(8));
-                } else if (info[i][j].contains("startY")) {
-                    shapes[i].startY = Integer.parseInt(info[i][j].substring(8));
-                } else if (info[i][j].contains("endX")) {
-                    shapes[i].endX = Integer.parseInt(info[i][j].substring(6));
-                } else if (info[i][j].contains("endY")) {
-                    shapes[i].endY = Integer.parseInt(info[i][j].substring(6));
+            //now, we create the objects and put them into the shapes array
+            for (i = 0; i < numObjs; i++) {
+                //since first line is always blank, second index starts at 1, not 0
+                switch (info[i][1]) {
+                    case ("Circle"):
+                        shapes[i] = new Circle();
+                        break;
+                    case ("Rect"):
+                        shapes[i] = new Rectangle();
+                        break;
+                    case ("Line"):
+                        shapes[i] = new Line();
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            //now, we extrapolate the data on a case by case basis
+            int j;
+            //loop to index through the number of shapes
+            for (i = 0; i < numObjs; i++) {
+                //second loop to index through the individual line of info
+                //for each shape
+                //loop index starts at 2 to skip unnecessary info
+                for (j = 2; j < info[i].length; j++) {
+                    //cases for different info types
+                    //assign info to shape object
+                    if ((info[i][j].contains("r:")) && !(info[i][j].contains("c")) && !(info[i][j].contains("b"))&&!(info[i][j].contains("C"))) {
+                        shapes[i].r = Integer.parseInt(info[i][j].substring(3));
+                    } else if (info[i][j].contains("colour:")&&!(info[i][j].contains("Change"))) {
+                        shapes[i].colour = info[i][j].substring(8);
+                    } else if (info[i][j].contains("Hide")) {
+                        shapes[i].effects.add(new Hide());
+                        //sets start variable
+                        shapes[i].effects.get(shapes[i].effects.size() - 1).setStart(Integer.parseInt(info[i][j + 1].substring(7)));
+                        j += 2;
+                    } else if (info[i][j].contains("Show")) {
+                        shapes[i].effects.add(new Show());
+                        //sets start variable
+                        shapes[i].effects.get(shapes[i].effects.size() - 1).setStart(Integer.parseInt(info[i][j + 1].substring(7)));
+                        j += 2;
+                    } else if (info[i][j].contains("Jump")) {
+                        shapes[i].effects.add(new Jump());
+                        //sets variables start,x,y
+                        shapes[i].effects.get(shapes[i].effects.size() - 1).setStart(Integer.parseInt(info[i][j + 1].substring(7)));
+                        ((Jump) shapes[i].effects.get(shapes[i].effects.size() - 1)).setX(Integer.parseInt(info[i][j + 2].substring(3)));
+                        ((Jump) shapes[i].effects.get(shapes[i].effects.size() - 1)).setY(Integer.parseInt(info[i][j + 3].substring(3)));
+                        j += 4;
+                    }  else if (info[i][j].contains("Change")) {
+                        shapes[i].effects.add(new ChangeColour());
+                        ((ChangeColour)shapes[i].effects.get(shapes[i].effects.size() - 1)).setColor(info[i][j].substring(14));
+                        shapes[i].effects.get(shapes[i].effects.size() - 1).setStart(Integer.parseInt(info[i][j + 1].substring(7)));
+                        j +=4;
+                    } else if (info[i][j].contains("x:")) {
+                        shapes[i].x = Integer.parseInt(info[i][j].substring(3));
+                    } else if (info[i][j].contains("y:")) {
+                        shapes[i].y = Integer.parseInt(info[i][j].substring(3));
+                    } else if (info[i][j].contains("length")) {
+                        shapes[i].length = Integer.parseInt(info[i][j].substring(8));
+                    } else if (info[i][j].contains("width")) {
+                        shapes[i].width = Integer.parseInt(info[i][j].substring(7));
+                    } else if ((info[i][j].contains("border")) && !(info[i][j].contains("l"))) {
+                        shapes[i].border = Integer.parseInt(info[i][j].substring(8));
+                    } else if ((info[i][j].contains("border")) && (info[i][j].contains("l"))) {
+                        shapes[i].borderColour = info[i][j].substring(15);
+                    } else if (info[i][j].contains("startX")) {
+                        shapes[i].startX = Integer.parseInt(info[i][j].substring(8));
+                    } else if (info[i][j].contains("startY")) {
+                        shapes[i].startY = Integer.parseInt(info[i][j].substring(8));
+                    } else if (info[i][j].contains("endX")) {
+                        shapes[i].endX = Integer.parseInt(info[i][j].substring(6));
+                    } else if (info[i][j].contains("endY")) {
+                        shapes[i].endY = Integer.parseInt(info[i][j].substring(6));
+                    }
                 }
             }
+            //debug
+            return (shapes);
         }
-        //debug
-        System.out.print(shapes[0].colour);
-        return (shapes);
-
-    }
-
-    void run() {
-
+        catch(Exception e)
+        {
+            System.out.println("Incorrect text file format.");
+            return null;
+        }
     }
 }
 
-public class animationPlayer extends Application {
+public class Animationplayer extends Application {
 
     @Override
     public void start(Stage primaryStage) {
         Group root = new Group();
         Scene scene = new Scene(root, 600, 600);
         ap a1 = new ap();
-        Shape[] shapes = a1.loadAnimationFromFile("/Users/carts/Downloads/animation1.txt");
+        Shape[] shapes = a1.loadAnimationFromFile("/Users/giannacasselli/Downloads/animation1.txt");
         //launch(args);
         int i;
         /*for (i = 0; i < shapes.length; i++) {
@@ -467,36 +444,18 @@ public class animationPlayer extends Application {
                 effect.play(shape.getShape(), timeline);
             }
         }
-
         //first parameter is start time
         KeyFrame stopFrame = new KeyFrame(Duration.seconds(ap.frames / ap.speed), event -> {
             timeline.stop();
             primaryStage.close();
         }
         );
-
         //adds keyframe to timeline
         timeline.getKeyFrames().add(stopFrame);
-
-        /*Show show = new Show();
-        show.play(shapes[0].getShape(), timeline);
-        
-        Jump jump = new Jump();
-        shapes[0].effects.get(1).play(shapes[0].getShape(), timeline);
-        ChangeColour change=new ChangeColour();
-        shapes[1].effects.get(1).play(shapes[1].getShape(), timeline);
-        //shapes[1].effects.get(1).play(shapes[1].getShape(), timeline);
-
-
-*/
         timeline.play();        
-
     }
 
     public static void main(String[] args) {
         launch(args);
-        
-
     }
 }
-
