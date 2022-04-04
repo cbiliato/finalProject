@@ -22,6 +22,8 @@ import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.util.Duration;
 
+/**
+ */
 abstract class Shape {
 
     javafx.scene.shape.Shape shape;
@@ -32,8 +34,7 @@ abstract class Shape {
     String colour = "0,0,255";
     int start;
     int border;
-    //set default border colour in case not specified
-    String borderColour = "0,255,0";
+    String borderColour = "0,255,0";    //set default border colour in case not specified
     int length;
     int width;
     int startX;
@@ -45,30 +46,42 @@ abstract class Shape {
     static int count;
     ArrayList<Effect> effects = new ArrayList<Effect>(0);
 
+    /**
+     *
+     */
     Shape() {
         //updates everytime an object is made
         count++;
     }
-    
-    //needs to be specific shape
-    abstract void draw(Group root);
-    
-    //general shape
-    abstract javafx.scene.shape.Shape getShape();
+
+
+    /**
+     * Creates a javafx shape using the attributes from the object.
+     * @param root parent node to place the shape node onto
+     */
+    abstract void draw(Group root);    //needs to be specific shape
+
+
+    /**
+     * @return javafx shape object
+     */
+    abstract javafx.scene.shape.Shape getShape();    //general shape
+
 }
 
+/**
+ */
 class Circle extends Shape {
-    
+
     //couldnt call upon class circle because we already have circle class
     javafx.scene.shape.Circle circle1 = new javafx.scene.shape.Circle();
-
     Circle() {
 
     }
 
-        //attributes for circle
+
     @Override
-    void draw(Group root) {
+    void draw(Group root) {    //attributes for circle
         Color c = Color.web("rgb(" + colour + ")"); //turn string into color value
         circle1.setRadius(r);
         circle1.setVisible(true);
@@ -85,6 +98,8 @@ class Circle extends Shape {
     }
 }
 
+/**
+ */
 class Rectangle extends Shape {
 
     javafx.scene.shape.Rectangle rectangle1 = new javafx.scene.shape.Rectangle();
@@ -142,17 +157,31 @@ class Line extends Shape {
 
 }
 
+/**
+ */
 class Effect { //parent class effect
 
     private int start; //specifies frames start
 
+    /**
+     * Creates a keyframe where the effect is applied to the shape.
+     * @param shape javafx shape that gets effect applied to
+     * @param timeline timeline of multiple frames where keyframe is added to
+     */
     void play(javafx.scene.shape.Shape shape, Timeline timeline) {
     }
 
+    /**
+     * @return the start frame of the effect keyframe
+     */
     int getStart() {
         return start;
     }
 
+    /**
+     * Sets the start frame of the effect keyframe.
+     * @param start frame when the effect starts
+     */
     void setStart(int start) {
         if (start > 0) {
             this.start = start;
@@ -160,11 +189,13 @@ class Effect { //parent class effect
     }
 }
 
+/**
+ */
 class Show extends Effect {
 
     void play(javafx.scene.shape.Shape shape, Timeline timeline) { //to put keyframe into the timeline
         //first parameter is start time
-        KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ap.speed), event -> {
+        KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart() / ap.speed), event -> {
             shape.setVisible(true);
         }
         );
@@ -176,11 +207,11 @@ class Show extends Effect {
 }
 
 class Hide extends Effect {
-    
-        @Override
-        void play(javafx.scene.shape.Shape shape, Timeline timeline) {
+
+    @Override
+    void play(javafx.scene.shape.Shape shape, Timeline timeline) {
         //first parameter is start time
-        KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ap.speed), event -> {
+        KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart() / ap.speed), event -> {
             shape.setVisible(false);
         }
         );
@@ -196,93 +227,120 @@ class Jump extends Effect {
     private int x; //coordinates
     private int y;
 
+    /**
+     * @return x value after jump effect
+     */
     int getX() {
         return x;
     }
 
+    /**
+     * Sets the x value of the jump effect.
+     * @param x x value after jump effect
+     */
     void setX(int x) {
         if (x > 0) {
             this.x = x;
         }
     }
 
+    /**
+     * @return y value after jump effect
+     */
     int getY() {
         return y;
     }
 
+    /**
+     * Sets the y value of the jump effect.
+     * @param y y value after jump effect
+     */
     void setY(int y) {
         if (y > 0) {
             this.y = y;
         }
     }
+
     @Override
     void play(javafx.scene.shape.Shape shape, Timeline timeline) {
         //first parameter is start time
-        KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ap.speed), event -> {
-            shape.relocate(x,y);
+        KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart() / ap.speed), event -> {
+            shape.relocate(x, y);
         });
         timeline.getKeyFrames().add(showFrame);
     }
 
 }
 
+/**
+ */
 class ChangeColour extends Effect {
+
     Color c;
     String colour;
-    static int count=0;
-    ChangeColour()
-    {
+    static int count = 0;
+
+    /**
+     *
+     */
+    ChangeColour() {
         count++;
-        this.colour="0,0,255";
+        this.colour = "0,0,255";
     }
-    void setColor(String colour1)
-    {
-        this.colour=colour1;
-        System.out.println(colour1+"is working");
-        this.c=Color.web("rgb("+colour+")");
+
+    /**
+     * Sets the colour of the shape according to string parameter.
+     * @param colour1 String of rgb values
+     */
+    void setColor(String colour1) {
+        this.colour = colour1;
+        System.out.println(colour1 + "is working");
+        this.c = Color.web("rgb(" + colour + ")");
         System.out.print(c);
 
     }
 
     @Override
     void play(javafx.scene.shape.Shape shape, Timeline timeline) {
-        if(shape instanceof javafx.scene.shape.Circle)
-        {
-            KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ap.speed), event -> {
-            shape.setFill(c);
+        if (shape instanceof javafx.scene.shape.Circle) {
+            KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart() / ap.speed), event -> {
+                shape.setFill(c);
             }
             );
             timeline.getKeyFrames().add(showFrame);
-        }
-        else if(shape instanceof javafx.scene.shape.Rectangle)
-        {
-            KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ap.speed), event -> {
-            shape.setFill(c);
+        } else if (shape instanceof javafx.scene.shape.Rectangle) {
+            KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart() / ap.speed), event -> {
+                shape.setFill(c);
             }
             );
             timeline.getKeyFrames().add(showFrame);
             //System.out.println(newcolour);
-        }
-        else if(shape instanceof javafx.scene.shape.Line)
-        {
-            KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart()/ap.speed), event -> {
-            shape.setStroke(c);
+        } else if (shape instanceof javafx.scene.shape.Line) {
+            KeyFrame showFrame = new KeyFrame(Duration.seconds(getStart() / ap.speed), event -> {
+                shape.setStroke(c);
             }
             );
             timeline.getKeyFrames().add(showFrame);
         }
         timeline.play();
-        System.out.print("\n"+count);
-   }
+        System.out.print("\n" + count);
+    }
 
 }
 
+/**
+ */
 class ap {
 
     static int frames;
     static int speed;
     static int numObjs;
 
+    /**
+     * Creates shape objects and related effects. Stores attributes from the text file being read.
+     * @param FileName string of file path for the text file being read
+     * @return array of all shape objects
+     */
     public Shape[] loadAnimationFromFile(String FileName) {
         //there a LOT
         //im gonna comment in case it gets too confusing
@@ -373,9 +431,9 @@ class ap {
             for (j = 2; j < info[i].length; j++) {
                 //cases for different info types
                 //assign info to shape object
-                if ((info[i][j].contains("r:")) && !(info[i][j].contains("c")) && !(info[i][j].contains("b"))&&!(info[i][j].contains("C"))) {
+                if ((info[i][j].contains("r:")) && !(info[i][j].contains("c")) && !(info[i][j].contains("b")) && !(info[i][j].contains("C"))) {
                     shapes[i].r = Integer.parseInt(info[i][j].substring(3));
-                } else if (info[i][j].contains("colour:")&&!(info[i][j].contains("Change"))) {
+                } else if (info[i][j].contains("colour:") && !(info[i][j].contains("Change"))) {
                     shapes[i].colour = info[i][j].substring(8);
                 } else if (info[i][j].contains("Hide")) {
                     shapes[i].effects.add(new Hide());
@@ -394,18 +452,13 @@ class ap {
                     ((Jump) shapes[i].effects.get(shapes[i].effects.size() - 1)).setX(Integer.parseInt(info[i][j + 2].substring(3)));
                     ((Jump) shapes[i].effects.get(shapes[i].effects.size() - 1)).setY(Integer.parseInt(info[i][j + 3].substring(3)));
                     j += 4;
-                   
-                    
-                }  else if (info[i][j].contains("Change")) {
+
+                } else if (info[i][j].contains("Change")) {
                     shapes[i].effects.add(new ChangeColour());
-                    ((ChangeColour)shapes[i].effects.get(shapes[i].effects.size() - 1)).setColor(info[i][j].substring(14));
-                    System.out.print(shapes[i].colour+"\n");
+                    ((ChangeColour) shapes[i].effects.get(shapes[i].effects.size() - 1)).setColor(info[i][j].substring(14));
+                    System.out.print(shapes[i].colour + "\n");
                     shapes[i].effects.get(shapes[i].effects.size() - 1).setStart(Integer.parseInt(info[i][j + 1].substring(7)));
-                    //System.out.println("wagwan");
-                    //((ChangeColour) shapes[i].effects.get(shapes[i].effects.size() - 1)).play(shapes[i].getShape(),timeline,info[i][j].substring(16));
-                    //((ChangeColour) shapes[i].effects.get(shapes[i]));
-                    //shapes[i].ChangeColour(Integer.parseInt(info[i][j + 1].substring(7)), info[i][j + 2].substring(8));
-                    j +=4;
+                    j += 4;
                 } else if (info[i][j].contains("x:")) {
                     shapes[i].x = Integer.parseInt(info[i][j].substring(3));
                 } else if (info[i][j].contains("y:")) {
@@ -435,11 +488,16 @@ class ap {
 
     }
 
+    /**
+     *
+     */
     void run() {
 
     }
 }
 
+/**
+  */
 public class animationPlayer extends Application {
 
     @Override
@@ -447,23 +505,17 @@ public class animationPlayer extends Application {
         Group root = new Group();
         Scene scene = new Scene(root, 600, 600);
         ap a1 = new ap();
-        Shape[] shapes = a1.loadAnimationFromFile("/Users/carts/Downloads/animation1.txt");
-        //launch(args);
-        int i;
-        /*for (i = 0; i < shapes.length; i++) {
-            shapes[i].draw(root);
-        }*/
+        Shape[] shapes = a1.loadAnimationFromFile("/Users/phant/OneDrive/Desktop/finalProjectRepo/finalProject/animation1.txt");
+
         primaryStage.setScene(scene);
         primaryStage.show();
 
         //parameter is frame rate
         Timeline timeline = new Timeline(ap.speed);
         timeline.setCycleCount(1);
-        for(Shape shape:shapes)
-        {
+        for (Shape shape : shapes) {
             shape.draw(root);
-            for(Effect effect:shape.effects)
-            {
+            for (Effect effect : shape.effects) {
                 effect.play(shape.getShape(), timeline);
             }
         }
@@ -478,25 +530,16 @@ public class animationPlayer extends Application {
         //adds keyframe to timeline
         timeline.getKeyFrames().add(stopFrame);
 
-        /*Show show = new Show();
-        show.play(shapes[0].getShape(), timeline);
-        
-        Jump jump = new Jump();
-        shapes[0].effects.get(1).play(shapes[0].getShape(), timeline);
-        ChangeColour change=new ChangeColour();
-        shapes[1].effects.get(1).play(shapes[1].getShape(), timeline);
-        //shapes[1].effects.get(1).play(shapes[1].getShape(), timeline);
-
-
-*/
-        timeline.play();        
+        timeline.play();
 
     }
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         launch(args);
-        
 
     }
 }
-
